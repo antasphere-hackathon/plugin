@@ -1,0 +1,33 @@
+{
+  "title": "Invoice Hands",
+  "team": "Team Example",
+  "lang": "en",
+  "oneLiner": "Invoice Hands collects your supplier invoices from their portals for you.",
+  "forWhom": "freelancers who lose an hour a month downloading PDFs",
+  "app": {
+    "url": "http://127.0.0.1:3000",
+    "open": "Clone the team repository and run `hackathon setup`, or watch the steps below: every screenshot is the real app.",
+    "signIn": "Sign in with the account you created when you claimed the instance."
+  },
+  "steps": [
+    {
+      "title": "Add a portal",
+      "path": "/portals",
+      "do": "Click `Add a portal`, pick `Example Energy` and paste the demo login.",
+      "see": "The portal listed as `connected`.",
+      "expect": ["connected"]
+    },
+    {
+      "title": "Fetch the invoices",
+      "path": "/portals",
+      "do": "Say \"fetch my invoices\" into the microphone button.",
+      "see": "A browser agent opens the portal; after about 30 s three PDFs appear in the list.",
+      "expect": ["Invoices"]
+    }
+  ],
+  "tryThis": {
+    "title": "Watch the agent work",
+    "text": "Open `Runs`: the live view shows the agent clicking through the portal in a real browser."
+  },
+  "notFinished": ["Portals with a two-factor login.", "Invoices older than a year."]
+}

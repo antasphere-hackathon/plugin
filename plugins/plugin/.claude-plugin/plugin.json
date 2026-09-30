@@ -1,0 +1,11 @@
+{
+  "name": "plugin",
+  "displayName": "Antasphere Hackathon",
+  "version": "0.1.0",
+  "description": "The participant skills of the Antasphere Hackathon: /plugin:join (from zero to your team's app running), /plugin:check (the doctor, the clock) and /plugin:demo (screenshots of your app, the demo deck on Slideless, its link on the platform).",
+  "author": { "name": "Antasphere", "url": "https://antasphere.com" },
+  "homepage": "https://github.com/antasphere-hackathon/plugin",
+  "repository": "https://github.com/antasphere-hackathon/plugin",
+  "license": "SEE LICENSE IN LICENSE",
+  "keywords": ["antasphere", "hackathon", "participant", "slideless", "playwright"]
+}

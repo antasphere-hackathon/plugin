@@ -1,0 +1,19 @@
+{
+  "name": "antasphere-hackathon",
+  "owner": {
+    "name": "Antasphere",
+    "url": "https://antasphere.com"
+  },
+  "metadata": {
+    "description": "The participant plugin of the Antasphere Hackathon: join the event, check your setup, make your demo deck."
+  },
+  "plugins": [
+    {
+      "name": "plugin",
+      "source": "./plugins/plugin",
+      "description": "Join the Antasphere Hackathon, keep your setup healthy and make your team's demo deck, driven by the hackathon CLI.",
+      "category": "productivity",
+      "homepage": "https://github.com/antasphere-hackathon/plugin"
+    }
+  ]
+}
