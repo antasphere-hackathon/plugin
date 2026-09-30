@@ -5,13 +5,13 @@
     "url": "https://antasphere.com"
   },
   "metadata": {
-    "description": "The participant plugin of the Antasphere Hackathon: join the event, check your setup, make your demo deck."
+    "description": "The Antasphere Hackathon plugin: join the event, check your setup, make your demo deck; for coaches, brief on a team and answer its help requests."
   },
   "plugins": [
     {
       "name": "plugin",
       "source": "./plugins/plugin",
-      "description": "Join the Antasphere Hackathon, keep your setup healthy and make your team's demo deck, driven by the hackathon CLI.",
+      "description": "Join the Antasphere Hackathon, keep your setup healthy and make your team's demo deck; as a coach, get briefed on any team and answer its requests. Driven by the hackathon CLI.",
       "category": "productivity",
       "homepage": "https://github.com/antasphere-hackathon/plugin"
     }
