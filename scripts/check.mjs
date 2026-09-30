@@ -3,7 +3,8 @@
  * The plugin's CI check, no dependency: the marketplace and the plugin
  * manifests parse and agree, every skill has a SKILL.md whose frontmatter
  * names the skill as its folder and carries a description, and every script
- * a skill names exists and parses.
+ * a skill names exists and parses, and a skill's template/ is a Slideless
+ * reference (index.html, AGENT.md with its type, title, description, timestamp).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -64,17 +65,33 @@ if (market) {
         if (!fs.existsSync(p)) fail(`${rel}: names ${m[0]}, which does not exist`);
       }
     }
-    const scripts = path.join(skillsDir, 'demo', 'scripts');
-    for (const f of fs.existsSync(scripts) ? fs.readdirSync(scripts) : []) {
-      const p = path.join(scripts, f);
-      if (f.endsWith('.mjs')) {
-        try {
-          execFileSync(process.execPath, ['--check', p], { stdio: 'pipe' });
-        } catch (e) {
-          fail(`${path.relative(root, p)}: ${String(e.stderr).split('\n')[0]}`);
+    for (const skill of fs.readdirSync(skillsDir)) {
+      const scripts = path.join(skillsDir, skill, 'scripts');
+      for (const f of fs.existsSync(scripts) ? fs.readdirSync(scripts) : []) {
+        const p = path.join(scripts, f);
+        if (f.endsWith('.mjs')) {
+          try {
+            execFileSync(process.execPath, ['--check', p], { stdio: 'pipe' });
+          } catch (e) {
+            fail(`${path.relative(root, p)}: ${String(e.stderr).split('\n')[0]}`);
+          }
+        } else if (f.endsWith('.json')) {
+          readJson(path.relative(root, p));
         }
-      } else if (f.endsWith('.json')) {
-        readJson(path.relative(root, p));
+      }
+      // A skill's template/ is a Slideless reference: an index.html and an
+      // AGENT.md whose frontmatter names its type and title.
+      const template = path.join(skillsDir, skill, 'template');
+      if (fs.existsSync(template)) {
+        const rel = path.relative(root, template);
+        if (!fs.existsSync(path.join(template, 'index.html'))) fail(`${rel}/index.html: missing`);
+        const agent = path.join(template, 'AGENT.md');
+        const fm = fs.existsSync(agent) ? /^---\n([\s\S]*?)\n---\n/.exec(fs.readFileSync(agent, 'utf8')) : null;
+        if (!fm) fail(`${rel}/AGENT.md: missing, or no frontmatter`);
+        else {
+          if (!/^type: (Template|Brand)$/m.test(fm[1])) fail(`${rel}/AGENT.md: type must be Template or Brand`);
+          for (const key of ['title', 'description', 'timestamp']) if (!new RegExp(`^${key}: \\S`, 'm').test(fm[1])) fail(`${rel}/AGENT.md: ${key} is required`);
+        }
       }
     }
   }

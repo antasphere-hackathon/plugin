@@ -1,13 +1,14 @@
 # Antasphere Hackathon: the participant plugin
 
 A Claude Code plugin for the participants of an Antasphere Hackathon. It drives the `hackathon`
-command line (npm `@antasphere/hackathon`) and holds three skills:
+command line (npm `@antasphere/hackathon`) and holds four skills:
 
 | Skill            | What it does                                                                                                                                   |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/plugin:join`   | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app. |
 | `/plugin:check`  | `hackathon doctor` and its fixes, the app restarted when it is down, the phase and the deadlines, whether your last push was received.        |
 | `/plugin:demo`   | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
+| `/plugin:vote`   | Makes the vote presentation the other participants read before ranking the teams: from the organizer's template, checked on a phone and a laptop, hosted on Slideless, linked. |
 
 ## Install
 
@@ -47,7 +48,10 @@ plugins/plugin/skills/join/SKILL.md
 plugins/plugin/skills/check/SKILL.md
 plugins/plugin/skills/demo/SKILL.md
 plugins/plugin/skills/demo/scripts/      play.mjs (Playwright), render.mjs (the deck), demo.example.json
-scripts/check.mjs                        the CI check: manifests, frontmatter, versions
+plugins/plugin/skills/vote/SKILL.md
+plugins/plugin/skills/vote/template/     the vote presentation deck (index.html, AGENT.md, assets/): the organizer's Slideless template
+plugins/plugin/skills/vote/scripts/      render.mjs (fills the deck), check.mjs (both sizes, Playwright), vote.example.json
+scripts/check.mjs                        the CI check: manifests, frontmatter, versions, templates
 ```
 
 A change to a skill bumps `version` in `plugins/plugin/.claude-plugin/plugin.json`; that version is
