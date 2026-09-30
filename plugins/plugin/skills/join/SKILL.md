@@ -1,6 +1,6 @@
 ---
 name: join
-description: Join the Antasphere Hackathon from zero to the team's app running locally. Installs the hackathon CLI, signs the participant in with their Antasphere account, checks their place on the roster, sets their GitHub username, waits for them to accept the repository invitation, clones the team repository, starts the app and opens it. Use when a participant says "join the hackathon", "set me up", "get started", "install the hackathon", "clone our team repo", or has just installed this plugin.
+description: Join the Antasphere Hackathon from zero to the team's app running locally. Installs the hackathon CLI, signs the participant in with their Antasphere account, checks their place on the roster, sets their GitHub username, waits for them to accept the repository invitation, clones the team repository, starts the app and opens it, then gives the team its project description and states the deadlines and the pacing. Use when a participant says "join the hackathon", "set me up", "get started", "install the hackathon", "clone our team repo", or has just installed this plugin.
 ---
 
 # Join the hackathon
@@ -110,9 +110,30 @@ Open the local app (`app.url`) and the platform's dashboard (`dashboardUrl`) fro
 Linux, `start` on Windows). If the app asks to claim the instance on the first boot, the setup token is
 in its log: `docker compose -p hackathon-<team> logs app | grep 'claim the instance'`, run from the clone.
 
+## 6. The team's project description
+
+Right after the app runs, give the team its one line: each team is a project of the event, and its
+description is what the organizers, the coaches and the jury read about it. Take the project from
+`hackathon event status --json` (`me.project.id`), then follow section 5 of `/plugin:check` ("The
+team's project description"): ASK in one question what they are building (the problem, for whom, the
+approach), propose a crisp description, and on their OK set it, or, as a participant is an editor
+of their project and only a manager may change it, open the `Project description` request for an
+organizer with the agreed text. If they do not know yet, say it can wait and `/plugin:check` will ask
+again.
+
+## 7. The clock and the pacing
+
+Read `hackathon event status --json` and tell the participant the phase, the time left to the build
+end and to the freeze (the build end plus 15 minutes) in the event's time zone, and the rule: what
+counts is the last push to the designated branch (`submission.repository.designatedBranch` in the
+team's line) that the platform **received** before the freeze; there is nothing to click. From here,
+the pacing of `/plugin:check` section 6 holds: push small and often (at least every 30 to 45 minutes)
+and confirm the receipt, warnings at 60, 30 and 15 minutes before the build end, only fixes in the
+grace, `/plugin:demo` before the end.
+
 Finish with one short summary: who they are, their team, the clone's folder, the local URL, the
-dashboard URL, and the two next skills: `/plugin:check` any time something looks wrong or to read the
-clock, `/plugin:demo` when the demo deck is due.
+dashboard URL, the deadlines, and the two next skills: `/plugin:check` at the start of every working
+session (the clock, the setup, the push), `/plugin:demo` when the demo deck is due.
 
 ## Exit codes
 
