@@ -1,0 +1,34 @@
+{
+  "lang": "en",
+  "team": "Team Example",
+  "product": "Invoice Hands",
+  "oneLiner": "It collects your supplier invoices from their portals, so you never log in to download a PDF again.",
+  "forWhom": "freelancers who lose an hour a month on invoices",
+  "problem": {
+    "person": "Léa, a freelance designer with eleven suppliers",
+    "text": "Every month she logs in to eleven portals to download eleven PDFs. She forgets two."
+  },
+  "does": {
+    "image": "../demo/screens/03.jpg",
+    "lines": [
+      "You add a supplier's portal once, with the demo login.",
+      "A browser agent signs in and fetches every new invoice.",
+      "The PDFs land in one list, named and dated."
+    ]
+  },
+  "moment": {
+    "image": "../demo/screens/05.jpg",
+    "text": "Say \"fetch my invoices\" and watch the agent click through the portal."
+  },
+  "built": {
+    "lines": [
+      "A browser agent that reads each portal like a person would.",
+      "Voice in, a dashboard out, on the starter's own stack."
+    ]
+  },
+  "why": {
+    "line": "Because the hour it gives back is real, and you can try it tonight.",
+    "members": ["Alex", "Sam", "Noor"]
+  },
+  "demoUrl": "https://slideless.antasphere.com/v/example-token/"
+}
