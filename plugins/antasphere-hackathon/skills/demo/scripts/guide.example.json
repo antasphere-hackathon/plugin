@@ -1,0 +1,103 @@
+{
+  "lang": "en",
+  "occasion": "Antasphere Hackathon · 2 October 2026",
+  "team": "Team Example",
+  "members": [
+    "Alex",
+    "Sam",
+    "Noor"
+  ],
+  "title": "Invoice Hands",
+  "subtitle": "It collects your supplier invoices from their portals, so you never log in to download a PDF again.",
+  "forWhom": "for freelancers with a dozen suppliers",
+  "app": {
+    "url": "http://127.0.0.1:3000"
+  },
+  "intro": [
+    "Three episodes: a portal added, the agent fetching the invoices, the list you hand to your accountant."
+  ],
+  "worlds": {
+    "setup": {
+      "name": "What was set up",
+      "text": "A demo account with three invented supplier portals and their demo logins. No real data."
+    },
+    "agent": {
+      "name": "What the agent does",
+      "text": "It signs in to each portal in a real browser, finds the new invoices and downloads them. You decide what gets paid."
+    }
+  },
+  "notFinished": [
+    "Portals with a two-factor login.",
+    "Invoices older than a year."
+  ],
+  "episodes": [
+    {
+      "title": "Add a portal",
+      "who": "You",
+      "minutes": 1,
+      "situation": "You have just signed in; no portal is connected yet.",
+      "steps": [
+        {
+          "do": "Click « Add a portal ».",
+          "see": "The list of supported portals.",
+          "shot": "screens/01.jpg",
+          "path": "/portals",
+          "expect": [
+            "Add a portal"
+          ]
+        },
+        {
+          "do": "Pick « Example Energy » and paste the demo login.",
+          "see": "The portal listed as « connected ».",
+          "shot": "screens/02.jpg",
+          "expect": [
+            "connected"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "The agent fetches the invoices",
+      "who": "The agent",
+      "minutes": 2,
+      "situation": "One portal is connected and holds three invoices you have not downloaded.",
+      "steps": [
+        {
+          "do": "Say « fetch my invoices » into the microphone button.",
+          "see": "The agent's live view: a browser signing in to the portal.",
+          "shot": "screens/03.jpg"
+        },
+        {
+          "do": "Wait about thirty seconds.",
+          "see": "Three invoices appear in « Invoices », each named by supplier and month.",
+          "shot": "screens/04.jpg",
+          "expect": [
+            "Invoices"
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Hand them to the accountant",
+      "who": "You",
+      "minutes": 1,
+      "situation": "The month's invoices are in the list.",
+      "steps": [
+        {
+          "do": "Open « Invoices » and tick the three of September.",
+          "see": "The three rows selected, « Export » enabled.",
+          "shot": "screens/05.jpg"
+        },
+        {
+          "do": "Click « Export ».",
+          "see": "A zip with the three PDFs.",
+          "noshot": "the export downloads a file"
+        }
+      ]
+    }
+  ],
+  "closing": {
+    "title": "What comes next",
+    "text": "A monthly run without asking, and the export sent straight to the accountant."
+  }
+}

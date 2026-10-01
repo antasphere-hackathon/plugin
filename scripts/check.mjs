@@ -4,7 +4,8 @@
  * manifests parse and agree, every skill has a SKILL.md whose frontmatter
  * names the skill as its folder and carries a description, every skill is in
  * the README (its table and its layout), no skill passes a credential flag
- * to the CLI, and every script a skill names exists and parses.
+ * to the CLI, every script a skill names exists in its own folder and parses,
+ * and a script several skills carry is the same file in each of them.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -71,18 +72,59 @@ if (market) {
         const p = path.join(dir, m[0]);
         if (!fs.existsSync(p)) fail(`${rel}: names ${m[0]}, which does not exist`);
       }
+      // `$SKILL_DIR/scripts/<file>`: the skill's own folder, the only one `npx skills add` installs
+      for (const m of text.matchAll(/\$SKILL_DIR\/(scripts\/[\w.-]+)/g)) {
+        if (!fs.existsSync(path.join(skillsDir, skill, m[1]))) fail(`${rel}: names $SKILL_DIR/${m[1]}, which is not in skills/${skill}/`);
+      }
     }
-    const scripts = path.join(skillsDir, 'demo', 'scripts');
-    for (const f of fs.existsSync(scripts) ? fs.readdirSync(scripts) : []) {
-      const p = path.join(scripts, f);
-      if (f.endsWith('.mjs')) {
-        try {
-          execFileSync(process.execPath, ['--check', p], { stdio: 'pipe' });
-        } catch (e) {
-          fail(`${path.relative(root, p)}: ${String(e.stderr).split('\n')[0]}`);
+    // a script several skills carry (each skill is installed alone) is the same file in each of them
+    const copies = new Map();
+    for (const skill of fs.readdirSync(skillsDir)) {
+      const scripts = path.join(skillsDir, skill, 'scripts');
+      for (const f of fs.existsSync(scripts) ? fs.readdirSync(scripts) : []) {
+        if (!f.endsWith('.mjs')) continue;
+        const body = fs.readFileSync(path.join(scripts, f), 'utf8');
+        if (!copies.has(f)) copies.set(f, { skill, body });
+        else if (copies.get(f).body !== body)
+          fail(`skills/${skill}/scripts/${f} differs from skills/${copies.get(f).skill}/scripts/${f}: the copies must stay identical`);
+      }
+    }
+    // the plugin's own scripts (shared by several skills) parse
+    const walk = (d) => (fs.existsSync(d) ? fs.readdirSync(d).flatMap((f) => (fs.statSync(path.join(d, f)).isDirectory() ? walk(path.join(d, f)) : [path.join(d, f)])) : []);
+    for (const p of walk(path.join(dir, 'scripts')).filter((f) => f.endsWith('.mjs'))) {
+      try {
+        execFileSync(process.execPath, ['--check', p], { stdio: 'pipe' });
+      } catch (e) {
+        fail(`${path.relative(root, p)}: ${String(e.stderr).split('\n')[0]}`);
+      }
+    }
+    for (const skill of fs.readdirSync(skillsDir)) {
+      const scripts = path.join(skillsDir, skill, 'scripts');
+      for (const f of fs.existsSync(scripts) ? fs.readdirSync(scripts) : []) {
+        const p = path.join(scripts, f);
+        if (f.endsWith('.mjs')) {
+          try {
+            execFileSync(process.execPath, ['--check', p], { stdio: 'pipe' });
+          } catch (e) {
+            fail(`${path.relative(root, p)}: ${String(e.stderr).split('\n')[0]}`);
+          }
+        } else if (f.endsWith('.json')) {
+          readJson(path.relative(root, p));
         }
-      } else if (f.endsWith('.json')) {
-        readJson(path.relative(root, p));
+      }
+      // A skill's template/ is a Slideless reference: an index.html and an
+      // AGENT.md whose frontmatter names its type and title.
+      const template = path.join(skillsDir, skill, 'template');
+      if (fs.existsSync(template)) {
+        const rel = path.relative(root, template);
+        if (!fs.existsSync(path.join(template, 'index.html'))) fail(`${rel}/index.html: missing`);
+        const agent = path.join(template, 'AGENT.md');
+        const fm = fs.existsSync(agent) ? /^---\n([\s\S]*?)\n---\n/.exec(fs.readFileSync(agent, 'utf8')) : null;
+        if (!fm) fail(`${rel}/AGENT.md: missing, or no frontmatter`);
+        else {
+          if (!/^type: (Template|Brand)$/m.test(fm[1])) fail(`${rel}/AGENT.md: type must be Template or Brand`);
+          for (const key of ['title', 'description', 'timestamp']) if (!new RegExp(`^${key}: \\S`, 'm').test(fm[1])) fail(`${rel}/AGENT.md: ${key} is required`);
+        }
       }
     }
   }

@@ -1,0 +1,35 @@
+{
+  "lang": "en",
+  "occasion": "Antasphere Hackathon · 2 October 2026",
+  "team": "Team Example",
+  "product": "Invoice Hands",
+  "oneLiner": "It collects your supplier invoices from their portals, so you never log in to download a PDF again.",
+  "members": ["Alex", "Sam", "Noor"],
+  "problem": {
+    "person": "Léa, a freelance designer with eleven suppliers.",
+    "text": "Every month, eleven portals, eleven PDFs, and two she forgets."
+  },
+  "stake": { "number": "1 h", "unit": "lost every month", "text": "Léa timed it in September: 58 minutes, eleven sign-ins." },
+  "built": { "image": "../demo/screens/03.jpg", "text": "One list of every invoice, fetched by an agent that signs in for you." },
+  "how": {
+    "title": "How it works",
+    "headline": "You ask once; the agent does the clicking; the PDFs land in one list.",
+    "steps": [
+      { "title": "You ask", "sub": "By voice or text." },
+      { "title": "The agent", "sub": "Signs in, clicks.", "agent": true },
+      { "title": "The list", "sub": "PDFs, named." }
+    ],
+    "check": { "label": "You check", "text": "Nothing is paid without you." }
+  },
+  "demo": {
+    "image": "../demo/screens/05.jpg",
+    "text": "Watch it fetch three invoices from a real portal.",
+    "fallback": "If the portal is slow tonight, this is what it shows."
+  },
+  "next": {
+    "works": "Three portals, end to end, with the demo accounts.",
+    "missing": "Portals with a two-factor login.",
+    "then": "A monthly run and an export to the accountant."
+  },
+  "close": { "line": "The hour it gives back is real, and you can try it tonight.", "demoUrl": null }
+}
