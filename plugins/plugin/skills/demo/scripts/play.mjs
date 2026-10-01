@@ -4,16 +4,18 @@
  *
  * The /plugin:demo skill copies this file into the team's clone as
  * `decks/demo/play.mjs` and writes the gestures at the bottom for the team's
- * own app. It reads `decks/demo/demo.json` beside it, opens the app, plays one
- * gesture per step and writes one screenshot per step into `screens/`
- * (`01.jpg`, `02.jpg`, ...) and what it saw into `results.json`.
+ * own app. It reads `decks/demo/guide.json` beside it, opens the app, plays
+ * one gesture per step, numbered straight through the episodes (episode 1's
+ * steps are 1, 2, …, episode 2's carry on), and writes one screenshot per
+ * step into `screens/` (`01.jpg`, `02.jpg`, ...; none for a step with
+ * `noshot`) and what it saw into `results.json`.
  *
  *   node decks/demo/play.mjs                      # play every step, headless
  *   node decks/demo/play.mjs --login              # a visible browser: sign in by hand, close the window
  *   node decks/demo/play.mjs --from 3 --until 5   # replay a range
  *   node decks/demo/play.mjs --headed             # watch it play
  *
- * The app URL is demo.json's `app.url`. A signed-in app needs `--login`
+ * The app URL is guide.json's `app.url`. A signed-in app needs `--login`
  * once: the participant signs in in the window that opens and closes it,
  * and the session is kept OUTSIDE the repository
  * (~/.cache/antasphere-hackathon/<folder>-auth.json) for the plays after.
@@ -48,12 +50,16 @@ const UNTIL = Number(argVal('--until', Infinity));
 
 // ─── the demo ────────────────────────────────────────────────────────────────
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const demo = JSON.parse(fs.readFileSync(path.join(HERE, 'demo.json'), 'utf8'));
-const APP = String(demo.app?.url ?? '').replace(/\/$/, '');
+const guide = JSON.parse(fs.readFileSync(path.join(HERE, 'guide.json'), 'utf8'));
+const APP = String(guide.app?.url ?? '').replace(/\/$/, '');
 if (!/^https?:\/\//.test(APP)) {
-  console.error('demo.json has no app.url (http://127.0.0.1:<port>)');
+  console.error('guide.json has no app.url (http://127.0.0.1:<port>)');
   process.exit(2);
 }
+// every step of every episode, in order: the gestures are numbered the same way
+const STEPS = (guide.episodes ?? []).flatMap((ep, k) =>
+  (ep.steps ?? []).map((st) => ({ ...st, episode: k + 1, title: `${ep.title}: ${st.do}` }))
+);
 const SCREENS = path.join(HERE, 'screens');
 fs.mkdirSync(SCREENS, { recursive: true });
 const cacheDir = path.join(os.homedir(), '.cache', 'antasphere-hackathon');
@@ -120,7 +126,7 @@ const ctx = {
   }
 };
 
-// ─── the gestures (written for this app; one per step of demo.json) ──────────
+// ─── the gestures (written for this app; one per step of guide.json, numbered through the episodes) ─
 // Each gesture brings the screen to what the step's `see` says. Keep them
 // short: Playwright's own locators (getByRole, getByLabel, getByText).
 const gestures = {
@@ -134,11 +140,11 @@ const gestures = {
 // ─────────────────────────────────────────────────────────────────────────────
 
 let failed = 0;
-for (const [i, step] of demo.steps.entries()) {
+for (const [i, step] of STEPS.entries()) {
   const n = i + 1;
   if (n < FROM || n > UNTIL) continue;
   const shot = `${pad(n)}.jpg`;
-  const entry = { step: n, title: step.title, status: 'passed', shot, missing: [], note: null };
+  const entry = { step: n, episode: step.episode, title: step.title, status: 'passed', shot: `screens/${shot}`, missing: [], note: null };
   try {
     const gesture = gestures[n];
     if (gesture) await gesture(ctx);
@@ -155,7 +161,7 @@ for (const [i, step] of demo.steps.entries()) {
     entry.status = 'failed';
     entry.note = String(err?.message ?? err).split('\n')[0];
   }
-  if (step.shot !== false) {
+  if (!step.noshot) {
     await page.screenshot({ path: path.join(SCREENS, shot), type: 'jpeg', quality: 70 });
   } else {
     entry.shot = null;

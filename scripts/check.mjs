@@ -3,8 +3,9 @@
  * The plugin's CI check, no dependency: the marketplace and the plugin
  * manifests parse and agree, every skill has a SKILL.md whose frontmatter
  * names the skill as its folder and carries a description, and every script
- * a skill names exists and parses, and a skill's template/ is a Slideless
- * reference (index.html, AGENT.md with its type, title, description, timestamp).
+ * a skill names exists and parses (the skill's own and the plugin's shared
+ * scripts/), and a skill's template/, when one ships, is a Slideless reference
+ * (index.html, AGENT.md with its type, title, description, timestamp).
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -63,6 +64,18 @@ if (market) {
       for (const m of text.matchAll(/skills\/[a-z-]+\/scripts\/[\w.-]+/g)) {
         const p = path.join(dir, m[0]);
         if (!fs.existsSync(p)) fail(`${rel}: names ${m[0]}, which does not exist`);
+      }
+      for (const m of text.matchAll(/\{CLAUDE_PLUGIN_ROOT\}\/(scripts\/[\w./-]+\.m?js)/g)) {
+        if (!fs.existsSync(path.join(dir, m[1]))) fail(`${rel}: names ${m[1]}, which does not exist`);
+      }
+    }
+    // the plugin's own scripts (shared by several skills) parse
+    const walk = (d) => (fs.existsSync(d) ? fs.readdirSync(d).flatMap((f) => (fs.statSync(path.join(d, f)).isDirectory() ? walk(path.join(d, f)) : [path.join(d, f)])) : []);
+    for (const p of walk(path.join(dir, 'scripts')).filter((f) => f.endsWith('.mjs'))) {
+      try {
+        execFileSync(process.execPath, ['--check', p], { stdio: 'pipe' });
+      } catch (e) {
+        fail(`${path.relative(root, p)}: ${String(e.stderr).split('\n')[0]}`);
       }
     }
     for (const skill of fs.readdirSync(skillsDir)) {

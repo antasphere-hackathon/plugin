@@ -1,142 +1,119 @@
 ---
 name: vote
-description: Make the team's vote presentation for the Antasphere Hackathon, the short deck the other participants read on the Vote page before ranking the teams. Starts it from the organizer's Slideless template, fills it from the repository and the demo screenshots, checks it on a phone and a laptop size, publishes it on Slideless with a share link and registers that link with hackathon decks link --vote. Use when the participant says "vote presentation", "make our vote deck", "the deck for the vote", "set our vote link", "vote", or when the event says the vote presentation is due.
+description: Make the team's vote presentation for the Antasphere Hackathon, the elevator pitch with the gaps filled that the other participants read on the Vote page before ranking the teams. Starts it from the organizer's Vote presentation template on Slideless, fills it from the repository and the demo's screenshots, checks it on a laptop and a phone, publishes it with a share link and registers that link with hackathon decks link --vote. Use when the participant says "vote presentation", "make our vote deck", "the deck for the vote", "set our vote link", "vote", or when the event says the vote presentation is due.
 ---
 
-# The vote presentation: filled, checked, hosted, linked
+# The vote presentation: the elevator pitch, filled, hosted, linked
 
-The other participants read it alone, on their phone or their laptop, in about 90 seconds: the
-hackathon app's Vote page shows it embedded in a frame, and they rank the teams under it. It is not
-the pitch (the stage talk for the jury) and not the demo (the jury's step-by-step). It is four to six
-screens: the cover, the problem, what it does, the moment to try, how it is built (optional), why
-vote for us.
+The other participants read it alone, on their phone or their laptop, in about a minute: the hackathon
+app's Vote page shows it framed above the ballot. Every team fills the same sentence, so the teams
+compare on the same grounds:
 
-The files ship with this skill: `${CLAUDE_PLUGIN_ROOT}/skills/vote/template/` is the deck itself
-(`index.html`, its `AGENT.md`, two placeholder images), `scripts/render.mjs` fills it from a
-`vote.json`, `scripts/check.mjs` checks it at both sizes, and `scripts/vote.example.json` shows the
-content filled for an invented tool. Work from the root of the team's clone; everything goes into
-`decks/vote/`.
+> For **who** who **need**, **Product** is **category** that **benefit**.
+> Today, **alternative**. With **Product**, **difference**.
 
-## 1. Gather
+Six screens: the cover, who it is for, what it is (beside a screenshot), what changes, the moment
+that proves it (beside a screenshot), the whole sentence with the team. It is not the pitch (the
+stage, `/plugin:pitch`) and not the demo (the jury's episodes, `/plugin:demo`).
 
-Read the repository (the README, the routes, the dashboard's pages). When `/plugin:demo` ran, read
-`decks/demo/demo.json` and look at `decks/demo/screens/`: its screenshots are real and already
-taken, reuse them (one for what it does, one for the moment to try). Without them, take two
-screenshots of the running app (the demo skill's `play.mjs` does it, or the participant does).
+Work from the root of the team's clone; everything goes into `decks/vote/`. The scripts ship with
+the plugin: `${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs` fills the deck, `check.mjs` checks it, and
+`${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts/vote.example.json` shows the content filled for an
+invented tool.
 
-Then ASK the participant, in ONE message, to confirm the six things, each proposed from what you
-read:
-
-1. the product's name, one sentence of what it does, and for whom;
-2. the problem: one real kind of person and what goes wrong for them today;
-3. what it does, in three short lines;
-4. the one thing to try that proves it is real;
-5. how it is built, two or three plain lines, or nothing;
-6. why vote for the team, one line, and the members' names.
-
-Also ask for the demo link, if the team has an `https://` one a reader can open (or none).
-
-## 2. Start from the organizer's template
-
-Slideless must be signed in and in the event's workspace, as in `/plugin:demo`:
+## 1. Slideless, in the event's workspace
 
 ```bash
+npm i -g @antasphere/slideless@latest
 slideless whoami --json
 ```
 
-The participant's `hackathon login` is the same Antasphere login. "No instance configured": pass
-`--api-url https://slideless.antasphere.com` to every `slideless` command. A request to sign in: the
-participant runs `hackathon login` in their own terminal. A refusal that the organization has no
-access to Slideless: go to **If Slideless is not available**. `workspace.name` in
-`hackathon whoami --json` is the event's organization; take the workspace with the same name in
-`slideless workspaces --json` and pass `--workspace <its id>` to every `slideless` command below.
-When none has that name, say so and ASK whether to use the default workspace.
+The participant's `hackathon login` is the same Antasphere login. It asks to sign in, or says "Run
+`antasphere login`": the participant runs `hackathon login` in their own terminal, then again. A
+refusal that the organization has no access to Slideless: STOP and tell the participant an organizer
+has to open Slideless to the event's organization; nothing can be published before.
+
+`workspace.name` in `hackathon whoami --json` is the event's organization; take the workspace with the
+same name in `slideless workspaces --json` and pass `--workspace <its id>` to every `slideless`
+command below. When none has that name, say so and ASK; never publish in a personal workspace.
+
+## 2. Start from the organizer's template
 
 ```bash
 slideless template list --json --workspace <id>
 ```
 
-Take the template whose `title` starts with `Vote`, then:
+Take the template titled `Vote presentation`. **When there is none, STOP**: tell the participant the
+organizers have not published the event's templates yet (their `/event-decks` guide does it) and to
+ask one of them. Never build the deck any other way. Then, once:
 
 ```bash
-slideless template start "<its title>" decks/vote/deck --workspace <id>
+slideless template start "Vote presentation" decks/vote/deck --workspace <id>
+printf 'decks/*/deck/\ndecks/*/check/\n' >> .gitignore    # once per clone, if not there yet
 ```
 
-Read `decks/vote/deck/AGENT.md`: its `fill` block says what to change (the JSON block and the two
-images) and what to keep (the engine). **When the workspace has no Vote template**, say so to the
-participant: the deck is built from this skill's own copy of the template in step 3 instead.
+`decks/vote/deck/` carries the Antasphere brand's typefaces, whose licence forbids a public
+repository: it is never committed. The team's source is `decks/vote/vote.json` and the screenshots.
+When `decks/vote/deck/` already exists, keep it: its `.slideless.json` is the link to the published
+deck, so the next push is a new version of the same deck and the share link keeps working.
 
-## 3. Fill
+## 3. Gather, then ASK
+
+Read the repository (the README, the routes, the dashboard's pages). When `/plugin:demo` ran, use its
+screenshots in `decks/demo/screens/`: one for what it is, one for the moment that proves it. Without
+them, take two screenshots of the running app (the demo skill's `play.mjs` does it).
+
+Then ASK the participant, in ONE message, to confirm each gap, proposed from what you read, and read
+the whole sentence aloud to them:
+
+1. the product's name (24 characters at most) and its one sentence;
+2. **who**: one kind of person; **need**: what goes wrong for them today;
+3. **category**: what kind of thing it is, with its article ("a browser agent"); **benefit**: what it
+   does for them;
+4. **alternative**: what they do today without it; **difference**: what changes with it;
+5. the moment to see, one sentence, and its screenshot;
+6. the members' names, and a demo link anyone can open (`https://`), or none.
+
+## 4. Fill and check
 
 Write `decks/vote/vote.json` in the shape of `vote.example.json`: `lang` (`en`, `fr` or `nl`),
-`team`, `product`, `oneLiner`, `forWhom` (without the leading "For": the deck adds it), `problem` (`person`, `text`), `does` (`image`, `lines`:
-one to three), `moment` (`image`, `text`), `built` (`lines`, or `null` to skip the screen), `why`
-(`line`, `members`), `demoUrl` (`https://…` or `null`). Image paths are relative to `decks/vote/`,
-so the demo's screenshots are `../demo/screens/03.jpg`. The team's own words, short: the limits are
-set so every screen fits a phone.
-
-With the organizer's template, fill the started deck in place:
+`occasion` (the event's name and date, from `hackathon event status --json`: its name and its start day, as `<name> · <day month year>`), `team`, `product`,
+`oneLiner`, `pitch` (`who`, `need`, `category`, `benefit`, `alternative`, `difference`), `does.image`,
+`moment` (`image`, `text`), `members`, `demoUrl`. Image paths are relative to `decks/vote/`. Each gap
+must flow from the fixed word before it (French: `qui`; Dutch: `die`).
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts/render.mjs" decks/vote --into decks/vote/deck
+node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs" vote decks/vote
+node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/check.mjs" decks/vote
 ```
 
-Without it, build from the skill's own copy:
+`fill.mjs` exit 2, one line per problem (an empty gap, a text too long, a missing image, a link that
+is not https): fix `vote.json`, run it again. `check.mjs` needs Playwright once per machine (exit 4
+says how: `npm i --prefix ~/.cache/antasphere-hackathon/playwright playwright@1`, then `npx --prefix
+~/.cache/antasphere-hackathon/playwright playwright install chromium`). It walks the six slides on a
+laptop and the six screens on a phone, writes `decks/vote/check/laptop-N.png` and `phone-N.png`, and
+prints `ok`. Exit 1, one line per problem: a text that runs out of its slide, a phone screen that
+scrolls, a request outside the deck, an image that did not load, a deck over 5 MB. Shorten in
+`vote.json`, fill, check again.
 
-```bash
-node "${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts/render.mjs" decks/vote
-```
-
-It writes `decks/vote/dist/`. Either way the content goes into the deck's `vote-content` JSON block,
-the screens are written into the file, and the two images are copied to `assets/does.<ext>` and
-`assets/moment.<ext>`. Exit 2, one line per problem: an empty field, too many lines, a text too long
-for the screen, a missing image, a demo link that is not https. Fix `vote.json` and run it again.
-
-## 4. Check both sizes
-
-Playwright, once per machine (skip when `/plugin:demo` already installed it):
-
-```bash
-npm i --prefix ~/.cache/antasphere-hackathon/playwright playwright@1
-npx --prefix ~/.cache/antasphere-hackathon/playwright playwright install chromium
-```
-
-Then:
-
-```bash
-node "${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts/check.mjs" decks/vote                           # the dist
-node "${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts/check.mjs" decks/vote --deck decks/vote/deck    # the template's deck
-```
-
-It opens the deck at 390 × 844 (a phone) and 1280 × 720 (a laptop), walks every screen and writes
-`decks/vote/check/phone-N.png` and `laptop-N.png`. It prints `ok · 6 screens · 12 screenshots in
-decks/vote/check/`. Exit 1, one line per problem: a request outside the folder, a page that scrolls,
-a screen whose text does not fit, text under 16 px on the phone, dots that do not match the screens,
-a key, a tap or a dot that does not move, an image that did not load, a cover that needs a script,
-a deck over 5 MB. Exit 4: Playwright is missing.
-
-Open the screenshots with the participant (`open decks/vote/check` on macOS). Whatever reads wrong
-is fixed in `vote.json`, rendered and checked again. A screen that says what the app does not do is
-rewritten, never kept.
+Open the screenshots with the participant (`open decks/vote/check`). A screen that says what the app
+does not do is rewritten, never kept.
 
 ## 5. Publish and share
 
 ```bash
-slideless push decks/vote/deck --title "<Team> · Vote" --template "<template title>" --no-open --json --workspace <id>
+slideless push decks/vote/deck --title "<Team> · Vote" --template "Vote presentation" --no-open --json --workspace <id>
 ```
 
-Without the organizer's template, push `decks/vote/dist` and leave out `--template`. Read
-`presentation.id` in the answer; the push writes `.slideless.json` in the folder, so a later push is
-a new version of the same deck and the link keeps working. Then one link for the Vote page, with no
-expiry and no password (a password link cannot be embedded, and an expiry before the results empties
-the page):
+Read `presentation.id`. Then one link for the Vote page, with no expiry and no password (a password
+link cannot be framed, and an expiry empties the Vote page):
 
 ```bash
 slideless share <deck id> --name "Community vote" --json --workspace <id>
 ```
 
-Read `url` in the answer: `https://<host>/v/<token>/`. It is shown once; keep it for the next step.
-A refusal about credits: an organizer tops the workspace up; say so and stop.
+Read `url`: `https://<host>/v/<token>/`, shown once. A refusal about credits: an organizer tops the
+organization up; say so and stop.
 
 ## 6. Hand the link to the platform
 
@@ -146,34 +123,20 @@ hackathon showcase set --product "<product>" --tagline "<oneLiner>" --json
 hackathon decks show --json
 ```
 
-The second command puts the product's name (24 characters at most, the `product` of `vote.json`) and
-its one sentence on the team's tile and above the deck on the Vote page: the other participants
-recognise a tool by its name, not by the team's. An older `hackathon` CLI without `--product`: say so,
-set the tagline alone, and tell the participant to update the CLI (`npm i -g @antasphere/hackathon@latest`).
+The team is the signed-in participant's own. Exit 2: not a share link `https://<host>/v/<token>/`, or
+a product name over 24 characters. Exit 1 with the platform's sentence: the link's host is not one the
+Vote page can show (the sentence names the allowed host: publish on that Slideless), or voting has
+opened and the vote presentation is fixed (an organizer can still replace it). Exit 3: sign in, or
+not on a team. An older `hackathon` CLI without `--vote` or `--product`: `npm i -g
+@antasphere/hackathon@latest`.
 
-The team is the signed-in participant's own; no `--team`. Exit 2: the link is not a share link of
-the form `https://<host>/v/<token>/`, or the product name is longer than 24 characters. Exit 1 with the
-platform's sentence: the link's host is not one the Vote page can show (the sentence names the allowed
-host), or voting has opened and the vote presentation is fixed (an organizer can still replace it). Exit
-3: sign in, or not on this team.
-
-Commit `decks/vote/` without `dist/` and without `check/` (add both to the clone's `.gitignore`), so
-the team keeps the source: `vote.json`, and `deck/` when it came from the template. Push it before
-the freeze like any other work.
-
-## If Slideless is not available
-
-When the Slideless CLI cannot sign in, or the organization has no access to Slideless, do not stop:
-steps 1, 3 and 4 do not need it. Build `decks/vote/dist/` from the skill's own template, check it,
-commit `vote.json`, and tell the participant plainly what is missing: the deck is ready locally at
-`decks/vote/dist/index.html`, and an organizer (or a coach) has to open Slideless to their
-organization before it can be hosted and linked. Once that is done, run this skill again from step 2.
+Commit `decks/vote/vote.json` and the screenshots it names, never `decks/vote/deck/` or
+`decks/vote/check/`. Push before the freeze like any other work.
 
 ## Never
 
+- Never build the deck without the organizer's template, and never copy the brand's files elsewhere.
 - Never put a credential, a password or a real person's data in a screenshot or a screen.
 - Never share the link with a password or an expiry.
-- Never add an external request to the deck: no webfont, no CDN, no remote image.
 - Never describe a feature the app does not have.
 - Never pass a credential to `slideless` or `hackathon`: the Antasphere login does the work.
-- Never commit `~/.cache/antasphere-hackathon/` or anything from it.

@@ -1,14 +1,19 @@
 # Antasphere Hackathon: the participant plugin
 
 A Claude Code plugin for the participants of an Antasphere Hackathon. It drives the `hackathon`
-command line (npm `@antasphere/hackathon`) and holds four skills:
+command line (npm `@antasphere/hackathon`) and holds five skills:
 
 | Skill            | What it does                                                                                                                                   |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `/plugin:join`   | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app. |
 | `/plugin:check`  | `hackathon doctor` and its fixes, the app restarted when it is down, the phase and the deadlines, whether your last push was received.        |
-| `/plugin:demo`   | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
-| `/plugin:vote`   | Makes the vote presentation the other participants read before ranking the teams: from the organizer's template, checked on a phone and a laptop, hosted on Slideless, linked. |
+| `/plugin:demo`   | Plays your running app with Playwright, takes the screenshots, fills the organizer's Demo deck template (one to three episodes), hosts it on Slideless, sets its link on the platform. |
+| `/plugin:pitch`  | Fills the organizer's Pitch presentation template (eight slides, three to five minutes on stage), checks it, hosts it on Slideless, sets its link on the platform. |
+| `/plugin:vote`   | Fills the organizer's Vote presentation template (the elevator pitch with the gaps filled), checks it on a phone and a laptop, hosts it on Slideless, sets its link on the platform. |
+
+The three decks start from templates the organizers publish in the event's Slideless workspace: the
+plugin carries no deck of its own. Each skill ends with the deck's share link registered on the
+platform (`hackathon decks link --demo | --pitch | --vote <url>`).
 
 ## Install
 
@@ -27,7 +32,8 @@ Updates: `/plugin marketplace update antasphere-hackathon`.
 
 - Node.js 22 or later, Git, Docker Desktop (or Docker Engine with Compose).
 - The email the organizers registered for you, and your GitHub account.
-- For the demo deck: nothing more. Playwright is installed by the skill into
+- For the decks: Slideless opened to your event's organization (the organizers do it) and the
+  Slideless CLI (`npm i -g @antasphere/slideless`). Playwright is installed by the skills into
   `~/.cache/antasphere-hackathon/`, outside your repository.
 
 The participant documentation is at [docs.antasphere.com](https://docs.antasphere.com), in the
@@ -47,11 +53,13 @@ plugins/plugin/.claude-plugin/plugin.json
 plugins/plugin/skills/join/SKILL.md
 plugins/plugin/skills/check/SKILL.md
 plugins/plugin/skills/demo/SKILL.md
-plugins/plugin/skills/demo/scripts/      play.mjs (Playwright), render.mjs (the deck), demo.example.json
+plugins/plugin/skills/demo/scripts/      play.mjs (Playwright), guide.example.json
+plugins/plugin/skills/pitch/SKILL.md
+plugins/plugin/skills/pitch/scripts/     pitch.example.json
 plugins/plugin/skills/vote/SKILL.md
-plugins/plugin/skills/vote/template/     the vote presentation deck (index.html, AGENT.md, assets/): the organizer's Slideless template
-plugins/plugin/skills/vote/scripts/      render.mjs (fills the deck), check.mjs (both sizes, Playwright), vote.example.json
-scripts/check.mjs                        the CI check: manifests, frontmatter, versions, templates
+plugins/plugin/skills/vote/scripts/      vote.example.json
+plugins/plugin/scripts/decks/            fill.mjs (a started template filled), check.mjs (laptop and phone, Playwright)
+scripts/check.mjs                        the CI check: manifests, frontmatter, versions, scripts
 ```
 
 A change to a skill bumps `version` in `plugins/plugin/.claude-plugin/plugin.json`; that version is

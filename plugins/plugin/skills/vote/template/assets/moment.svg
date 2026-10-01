@@ -1,6 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="900" viewBox="0 0 1440 900">
-  <rect width="1440" height="900" fill="#ecebe6"/>
-  <text x="720" y="430" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="56" font-weight="700" fill="#6d6c68">Screenshot of the moment to try</text>
-  <text x="720" y="510" text-anchor="middle" font-family="ui-sans-serif, system-ui, -apple-system, Helvetica, Arial, sans-serif" font-size="56" font-weight="700" fill="#6d6c68">goes here</text>
-  <text x="720" y="600" text-anchor="middle" font-family="ui-monospace, Menlo, monospace" font-size="30" fill="#8d8c87">placeholder · replace assets/moment.* with a real screenshot</text>
-</svg>
