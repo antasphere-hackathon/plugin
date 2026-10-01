@@ -1,13 +1,15 @@
 # Antasphere Hackathon: the participant and coach plugin
 
 The skills for the participants and the coaches of an Antasphere Hackathon, for any coding agent. They
-drive the `hackathon` command line (npm `@antasphere/hackathon`); there are five:
+drive the `hackathon` command line (npm `@antasphere/hackathon`); there are seven:
 
 | Skill            | What it does                                                                                                                                   |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `join`           | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app, then your project description and the deadlines. |
 | `check`          | The opening of every session: the clock first (time left to the build end and the freeze), `hackathon doctor` and its fixes, the app restarted when it is down, whether your last push was received, your project description kept current, and the pacing. |
-| `demo`           | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
+| `demo`           | Plays your running app with Playwright, takes the screenshots, fills the organizers' Demo deck template (one to three episodes), hosts it on Slideless, sets its link on the platform. |
+| `pitch`          | Fills the organizers' Pitch presentation template (eight slides, the stage), checks it, hosts it on Slideless, sets its link on the platform. |
+| `vote`           | Fills the organizers' Vote presentation template (the elevator pitch with the gaps filled), checks it on a phone and a laptop, hosts it on Slideless, sets its link on the platform. |
 | `coach-brief`    | For coaches: signs you in, picks the event, pulls one team's chat, threads, requests and deck links, clones or pulls its repository, summarizes. |
 | `coach-help`     | For coaches: what waits, a request and its thread read against the team's code, a reply drafted; claims, posts, resolves only on your word.    |
 
@@ -22,7 +24,7 @@ npx -y skills add antasphere-hackathon/plugin --global --skill '*' --yes
 Then say "join the hackathon". The simplest start is the prompt on
 [docs.antasphere.com/hackathon/getting-started/start-here](https://docs.antasphere.com/hackathon/getting-started/start-here),
 which runs this for you. In Claude Code the plugin also installs as before:
-`/plugin marketplace add antasphere-hackathon/plugin`, then `/plugin install plugin@antasphere-hackathon`.
+`/plugin marketplace add antasphere-hackathon/plugin`, then `/plugin install antasphere-hackathon@antasphere-hackathon`.
 
 ## For coaches
 
@@ -82,18 +84,25 @@ and never push to a team's repository.
 ## Layout
 
 ```
-.claude-plugin/marketplace.json          the marketplace: one plugin, named "plugin"
-plugins/plugin/.claude-plugin/plugin.json
-plugins/plugin/skills/join/SKILL.md
-plugins/plugin/skills/check/SKILL.md
-plugins/plugin/skills/demo/SKILL.md
-plugins/plugin/skills/coach-brief/SKILL.md
-plugins/plugin/skills/coach-help/SKILL.md
-plugins/plugin/skills/demo/scripts/      play.mjs (Playwright), render.mjs (the deck), demo.example.json
+.claude-plugin/marketplace.json          the marketplace: one plugin, named "antasphere-hackathon"
+plugins/antasphere-hackathon/.claude-plugin/plugin.json
+plugins/antasphere-hackathon/skills/join/SKILL.md
+plugins/antasphere-hackathon/skills/check/SKILL.md
+plugins/antasphere-hackathon/skills/demo/SKILL.md
+plugins/antasphere-hackathon/skills/demo/scripts/      play.mjs (Playwright), fill.mjs, check.mjs, guide.example.json
+plugins/antasphere-hackathon/skills/pitch/SKILL.md
+plugins/antasphere-hackathon/skills/pitch/scripts/     fill.mjs, check.mjs, pitch.example.json
+plugins/antasphere-hackathon/skills/vote/SKILL.md
+plugins/antasphere-hackathon/skills/vote/scripts/      fill.mjs, check.mjs, vote.example.json
+plugins/antasphere-hackathon/skills/coach-brief/SKILL.md
+plugins/antasphere-hackathon/skills/coach-help/SKILL.md
 scripts/check.mjs                        the CI check: manifests, frontmatter, versions, the README's skill table
 ```
 
-A change to a skill bumps `version` in `plugins/plugin/.claude-plugin/plugin.json`; that version is
+The three decks start from templates the organizers publish in the event's Slideless workspace: the
+plugin carries no deck of its own. Every skill carries its own scripts, because `npx skills add` installs a
+skill's folder alone: `fill.mjs` and `check.mjs` are the same file in demo, pitch and vote, and the CI check
+fails when the copies differ. A change to a skill bumps `version` in `plugins/antasphere-hackathon/.claude-plugin/plugin.json`; that version is
 what Claude Code compares on update. `node scripts/check.mjs` runs in CI on every push.
 
 ## License
