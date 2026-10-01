@@ -71,7 +71,7 @@ const image = (key, value) => {
 
 text('lang', c.lang, 5);
 text('team', c.team, 40);
-text('product', c.product, 32);
+text('product', c.product, 24); // the platform's own limit (TEAM_PRODUCT_MAX): the Vote page's tiles show it
 text('oneLiner', c.oneLiner, 140);
 text('forWhom', c.forWhom, 80);
 text('problem.person', c.problem?.person, 80);

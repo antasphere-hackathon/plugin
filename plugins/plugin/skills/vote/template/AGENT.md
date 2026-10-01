@@ -33,7 +33,7 @@ Only two things.
    | ---------------------- | ----------------------------------------------------------------- | ------------------ |
    | `lang`                 | `en`, `fr` or `nl`: the language of the screens' own labels       |                    |
    | `team`                 | the team's name, small on the cover                               | 40 characters      |
-   | `product`              | the product's name, the cover's display line                      | 32                 |
+   | `product`              | the product's name, the cover's display line, also on the Vote page's tiles | 24                 |
    | `oneLiner`             | what it does, one sentence                                        | 140                |
    | `forWhom`              | for whom, after "For"                                             | 80                 |
    | `problem.person`       | one real kind of person, by first name and what they do           | 80                 |

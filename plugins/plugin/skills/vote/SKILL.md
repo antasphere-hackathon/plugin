@@ -142,12 +142,20 @@ A refusal about credits: an organizer tops the workspace up; say so and stop.
 
 ```bash
 hackathon decks link --vote <url> --json
+hackathon showcase set --product "<product>" --tagline "<oneLiner>" --json
 hackathon decks show --json
 ```
 
+The second command puts the product's name (24 characters at most, the `product` of `vote.json`) and
+its one sentence on the team's tile and above the deck on the Vote page: the other participants
+recognise a tool by its name, not by the team's. An older `hackathon` CLI without `--product`: say so,
+set the tagline alone, and tell the participant to update the CLI (`npm i -g @antasphere/hackathon@latest`).
+
 The team is the signed-in participant's own; no `--team`. Exit 2: the link is not a share link of
-the form `https://<host>/v/<token>/`, or its host is not one the platform can show on the Vote page
-(the message names the allowed host). Exit 3: sign in, or not on this team.
+the form `https://<host>/v/<token>/`, or the product name is longer than 24 characters. Exit 1 with the
+platform's sentence: the link's host is not one the Vote page can show (the sentence names the allowed
+host), or voting has opened and the vote presentation is fixed (an organizer can still replace it). Exit
+3: sign in, or not on this team.
 
 Commit `decks/vote/` without `dist/` and without `check/` (add both to the clone's `.gitignore`), so
 the team keeps the source: `vote.json`, and `deck/` when it came from the template. Push it before
