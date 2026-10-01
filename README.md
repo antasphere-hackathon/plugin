@@ -1,26 +1,26 @@
 # Antasphere Hackathon: the participant plugin
 
-A Claude Code plugin for the participants of an Antasphere Hackathon. It drives the `hackathon`
+The skills for the participants of an Antasphere Hackathon, for any coding agent. It drives the `hackathon`
 command line (npm `@antasphere/hackathon`) and holds three skills:
 
 | Skill            | What it does                                                                                                                                   |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/plugin:join`   | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app. |
-| `/plugin:check`  | `hackathon doctor` and its fixes, the app restarted when it is down, the phase and the deadlines, whether your last push was received.        |
-| `/plugin:demo`   | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
+| `join`           | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app. |
+| `check`          | `hackathon doctor` and its fixes, the app restarted when it is down, the phase and the deadlines, whether your last push was received.        |
+| `demo`           | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
 
 ## Install
 
-In Claude Code:
+In any coding agent (Claude Code, Codex, Cursor, …), one command:
 
 ```
-/plugin marketplace add antasphere-hackathon/plugin
-/plugin install plugin@antasphere-hackathon
+npx -y skills add antasphere-hackathon/plugin --global --skill '*' --yes
 ```
 
-Then say `/plugin:join` (or just "join the hackathon").
-
-Updates: `/plugin marketplace update antasphere-hackathon`.
+Then say "join the hackathon". The simplest start is the prompt on
+[docs.antasphere.com/hackathon/getting-started/start-here](https://docs.antasphere.com/hackathon/getting-started/start-here),
+which runs this for you. In Claude Code the plugin also installs as before:
+`/plugin marketplace add antasphere-hackathon/plugin`, then `/plugin install plugin@antasphere-hackathon`.
 
 ## What you need
 

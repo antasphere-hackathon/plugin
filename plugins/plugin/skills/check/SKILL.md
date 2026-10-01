@@ -7,7 +7,7 @@ description: Check a hackathon participant's setup and read the event clock. Run
 
 The `hackathon` CLI does the checks; this skill runs it, reads the `--json` answers and walks the
 participant through the fixes. Run from the team's clone when there is one. If the participant never
-joined (no `hackathon` command, or `hackathon connect` says to sign in), run `/plugin:join` instead.
+joined (no `hackathon` command, or `hackathon connect` says to sign in), use the `join` skill instead.
 
 ## 1. The doctor
 
@@ -27,7 +27,7 @@ again after each fix, until it exits 0.
 - `push` refused: GitHub saw another account than the one on the roster. The participant accepts the
   invitation with the roster's account, or signs in to GitHub with it (`gh auth login`, which they run
   themselves).
-- `credential` or `roster` (class `access`): run `/plugin:join`; it handles the sign-in.
+- `credential` or `roster` (class `access`): use the `join` skill; it handles the sign-in.
 
 Never run `sudo` or `gh auth login` for them: show the command and let them run it.
 
@@ -63,7 +63,7 @@ Compare the team's last received revision with the local `HEAD`. If they differ 
 are meant to count, say so: push to the team's branch now.
 
 In the last hour before the build end, remind the participant that the demo deck is due:
-`/plugin:demo`.
+the `demo` skill.
 
 ## Exit codes
 

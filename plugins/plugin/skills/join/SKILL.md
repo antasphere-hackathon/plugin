@@ -32,16 +32,19 @@ hackathon connect --json
 ```
 
 - Exit 0: signed in already, go to step 3 with this answer.
-- Exit 3 saying to run `hackathon login`: the participant signs in once. `hackathon login` is
-  interactive (it asks the Antasphere email, then the code mailed to it), so the agent cannot answer
-  it: ask the participant to run `hackathon login` in a terminal of their own, with the email the
-  organizers registered for them, and to tell you when it printed `Signed in as …`. Then run
+- Exit 3 saying to run `hackathon login`: sign the participant in, in two commands. ASK their email:
+  "Which email address have you been using with Antasphere? It is the one our emails, your invitation
+  and the briefing call were sent to." Never guess it. Then say a code is on its way and run
+  `hackathon login --email <email> --send-only`. When they paste the code, run
+  `hackathon login --email <email> --code <code>`; it prints `Signed in as …`. A refused code has
+  expired: send a new one with `--send-only`. (A CLI older than 0.8.1 has no `--send-only`: run
+  `hackathon login --email <email>` and pass the code on its standard input.) Then run
   `hackathon connect --json` again.
 - "This account has no access to Antasphere Hackathon in any of its organizations" (exit 3): not
   fixable here. The organizers must add the participant's email to the event. Say so and stop.
 - `not_on_roster` (exit 3): the email signed in is not the one on the roster. If the participant used
   another email, run `npx @antasphere/cli logout` (it forgets the stored Antasphere login), then
-  `hackathon login` again (in their own terminal) with the email on the roster. Otherwise an organizer
+  sign in again, as above, with the email on the roster. Otherwise an organizer
   adds them; stop.
 - `event_not_configured` (exit 3): the event is not open yet. Stop and say to try again later.
 
@@ -111,8 +114,8 @@ Linux, `start` on Windows). If the app asks to claim the instance on the first b
 in its log: `docker compose -p hackathon-<team> logs app | grep 'claim the instance'`, run from the clone.
 
 Finish with one short summary: who they are, their team, the clone's folder, the local URL, the
-dashboard URL, and the two next skills: `/plugin:check` any time something looks wrong or to read the
-clock, `/plugin:demo` when the demo deck is due.
+dashboard URL, and the two next skills: the `check` skill any time something looks wrong or to read the
+clock, the `demo` skill when the demo deck is due.
 
 ## Exit codes
 
