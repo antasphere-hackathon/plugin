@@ -9,7 +9,7 @@
  * The slide decks (pitch, vote) are walked at 1280 × 720, slide by slide, and on a phone (390 × 844),
  * screen by screen; the demo page is read whole at 1440 × 900 with every episode open, its step
  * player opened once, and on a phone. Screenshots go to <folder>/check/. Exit 1, one line per
- * problem: a request to anything but the deck's own files, the brand's faces not loaded, a text that
+ * problem: a script error, a request to anything but the deck's own files, the brand's faces not loaded, a text that
  * runs out of its slide, a phone screen wider than the phone or taller than its screen, text under
  * 16 px on the phone, an image that did not load, a step without its screenshot, a deck over its
  * weight (5 MB for the vote, 12 MB otherwise). Exit 4: Playwright is missing.
@@ -72,6 +72,7 @@ const url = pathToFileURL(entry).href;
 const LOCAL = /^(file|data|blob|about):/;
 async function open(width, height) {
   const page = await browser.newPage({ viewport: { width, height }, deviceScaleFactor: 1 });
+  page.on('pageerror', (e) => fail(`${width}×${height}: the deck's script fails: ${String(e.message).split('\n')[0]} (start the deck from the template again; never edit outside its content)`));
   page.on('request', (r) => {
     if (!LOCAL.test(r.url())) fail(`${width}×${height}: a request outside the deck: ${r.url()}`);
   });
