@@ -2,8 +2,9 @@
 /*
  * The plugin's CI check, no dependency: the marketplace and the plugin
  * manifests parse and agree, every skill has a SKILL.md whose frontmatter
- * names the skill as its folder and carries a description, and every script
- * a skill names exists and parses.
+ * names the skill as its folder and carries a description, every skill is in
+ * the README (its table and its layout), no skill passes a credential flag
+ * to the CLI, and every script a skill names exists and parses.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -40,7 +41,12 @@ if (market) {
     if (entry.version) fail(`marketplace.json: ${entry.name}: keep the version in plugin.json only`);
 
     const skillsDir = path.join(dir, 'skills');
+    const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
     for (const skill of fs.readdirSync(skillsDir)) {
+      // Every skill is in the README's table and its layout, so a new one is never shipped undocumented.
+      // The table names a skill as `npx skills add` installs it: by its folder's name, `| \`<skill>\` |`.
+      if (!new RegExp(`^\\| \`${skill}\` +\\|`, 'm').test(readme)) fail(`README.md: the skill table does not name \`${skill}\``);
+      if (!readme.includes(`skills/${skill}/SKILL.md`)) fail(`README.md: the layout does not list skills/${skill}/SKILL.md`);
       const file = path.join(skillsDir, skill, 'SKILL.md');
       const rel = path.relative(root, file);
       if (!fs.existsSync(file)) {
@@ -59,6 +65,8 @@ if (market) {
       if (fields.name !== skill) fail(`${rel}: name "${fields.name}" must be the folder's "${skill}"`);
       if (!fields.description || fields.description.length < 60) fail(`${rel}: description missing or too short to trigger`);
       if (fields.description && fields.description.length > 1024) fail(`${rel}: description longer than 1024 characters`);
+      // A skill never hands a credential to the CLI (the README's promise): no API key or token flag in a command.
+      for (const m of text.matchAll(/hackathon [^\n`]*--(api-key|token)\b/g)) fail(`${rel}: passes a credential flag (${m[0]})`);
       for (const m of text.matchAll(/skills\/[a-z-]+\/scripts\/[\w.-]+/g)) {
         const p = path.join(dir, m[0]);
         if (!fs.existsSync(p)) fail(`${rel}: names ${m[0]}, which does not exist`);

@@ -1,11 +1,21 @@
 {
   "name": "plugin",
   "displayName": "Antasphere Hackathon",
-  "version": "0.1.0",
-  "description": "The participant skills of the Antasphere Hackathon: /plugin:join (from zero to your team's app running), /plugin:check (the doctor, the clock) and /plugin:demo (screenshots of your app, the demo deck on Slideless, its link on the platform).",
-  "author": { "name": "Antasphere", "url": "https://antasphere.com" },
+  "version": "0.4.0",
+  "description": "The participant and coach skills of the Antasphere Hackathon: /plugin:join (from zero to your team's app running), /plugin:check (the opening of every session: the clock, the doctor, the push received, the project description, the pacing), /plugin:demo (screenshots of your app, the demo deck on Slideless, its link on the platform), and for coaches /plugin:coach-brief (a team's chat, requests, decks and repository, summarized) and /plugin:coach-help (answer a help request, post on your word).",
+  "author": {
+    "name": "Antasphere",
+    "url": "https://antasphere.com"
+  },
   "homepage": "https://github.com/antasphere-hackathon/plugin",
   "repository": "https://github.com/antasphere-hackathon/plugin",
   "license": "SEE LICENSE IN LICENSE",
-  "keywords": ["antasphere", "hackathon", "participant", "slideless", "playwright"]
+  "keywords": [
+    "antasphere",
+    "hackathon",
+    "participant",
+    "coach",
+    "slideless",
+    "playwright"
+  ]
 }

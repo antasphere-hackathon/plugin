@@ -2,7 +2,7 @@
 /*
  * The play of a demo deck: plain Playwright, one file.
  *
- * The /plugin:demo skill copies this file into the team's clone as
+ * The demo skill copies this file into the team's clone as
  * `decks/demo/play.mjs` and writes the gestures at the bottom for the team's
  * own app. It reads `decks/demo/demo.json` beside it, opens the app, plays one
  * gesture per step and writes one screenshot per step into `screens/`
