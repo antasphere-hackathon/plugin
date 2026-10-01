@@ -1,5 +1,5 @@
 ---
-name: check
+name: hackathon-doctor
 description: Open every hackathon working session. Reads the event clock first and says the time left to the build end and the freeze, runs hackathon doctor and walks the participant through every failed check, restarts the team app when it is down, confirms the platform received the last push, keeps the team's project description current, and sets the pacing for the rest of the session (small pushes, the 60/30/15-minute warnings, fixes only in the grace, the demo deck before the end). Use at the start of any session in a team repository, and when the participant says "check", "is my setup ok", "the app is down", "doctor", "how much time is left", "when is the freeze", "did my push count", "our idea changed", or when something in the setup looks wrong.
 ---
 
@@ -9,7 +9,7 @@ Run this at the start of every working session in the team's clone, before any o
 clock comes first, because a team that loses track of it loses its submission. The `hackathon` CLI
 does the checks; this skill runs it, reads the `--json` answers and walks the participant through
 the fixes. Run from the team's clone. If the participant never joined (no `hackathon` command, or
-`hackathon connect` says to sign in), use the `join` skill instead.
+`hackathon connect` says to sign in), use the `hackathon-setup` skill instead.
 
 ## 1. The clock, first
 
@@ -58,7 +58,7 @@ again after each fix, until it exits 0.
 - `push` refused: GitHub saw another account than the one on the roster. The participant accepts the
   invitation with the roster's account, or signs in to GitHub with it (`gh auth login`, which they run
   themselves).
-- `credential` or `roster` (class `access`): use the `join` skill; it handles the sign-in.
+- `credential` or `roster` (class `access`): use the `hackathon-setup` skill; it handles the sign-in.
 
 Never run `sudo` or `gh auth login` for them: show the command and let them run it.
 
@@ -151,7 +151,7 @@ This section holds for the whole session, not only while this skill runs.
 - **Read the clock** again (`hackathon event status --json`) before starting any task that takes more
   than a few minutes, and after each push. Warn the participant once as each mark passes:
   - **60 minutes** before the build end: say the time left; scope down to what can work by then;
-    remind that the demo deck is due: the `demo` skill;
+    remind that the demo deck is due: the `hackathon-deck-demo` skill;
   - **30 minutes**: no new feature; make what exists work, push, confirm the receipt; the demo deck
     should be under way;
   - **15 minutes**: final push of the working state, confirm the receipt, finish the demo deck.
@@ -159,7 +159,7 @@ This section holds for the whole session, not only while this skill runs.
   Push each fix at once and confirm its receipt. Do not push in the last minute: a push GitHub
   accepts just before the freeze but that reaches the platform after it does not count.
 - **Before the end**, if the demo deck is not linked yet (`hackathon decks show --json`), run
-  the `demo` skill.
+  the `hackathon-deck-demo` skill.
 - If the organizers moved the build end (`event.lastReschedule`), say the new deadlines and their
   reason.
 

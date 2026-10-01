@@ -1,5 +1,5 @@
 ---
-name: demo
+name: hackathon-deck-demo
 description: Make the team's demo deck for the Antasphere Hackathon jury, a page of one to three episodes showing the app working step by step with real screenshots. Plays the team's running app with Playwright and takes one screenshot per step, fills the organizer's Demo deck template on Slideless with the episodes, checks it, publishes it with a share link and registers that link on the hackathon platform with hackathon decks link --demo. Use when the participant says "demo", "make our demo deck", "screenshots of our app", "publish the demo", "set our demo link", or when the demo deck is due.
 ---
 
@@ -13,8 +13,8 @@ running app. The jury opens a screenshot large and follows an episode step by st
 does not have is never in it.
 
 Work from the root of the team's clone; everything goes into `decks/demo/`. The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder
-`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts`, and after
-`npx skills add` it is `~/.agents/skills/demo/scripts`): `play.mjs` (the Playwright play, copied into the
+`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/hackathon-deck-demo/scripts`, and after
+`npx skills add` it is `~/.agents/skills/hackathon-deck-demo/scripts`): `play.mjs` (the Playwright play, copied into the
 clone and completed for this app), `fill.mjs` (fills the organizer's template), `check.mjs` (checks the
 page) and `guide.example.json` (the content filled for an invented tool).
 
@@ -24,7 +24,7 @@ page) and `guide.example.json` (the content filled for an invented tool).
 hackathon doctor --directory . --json
 ```
 
-The `app` check must pass. If it does not, run the `check` skill first. The app's local URL is
+The `app` check must pass. If it does not, run the `hackathon-doctor` skill first. The app's local URL is
 `http://127.0.0.1:<port>`, the port being `app.port` of `hackathon.json` (or the one `hackathon setup`
 printed when it was started with `--port`).
 
@@ -157,7 +157,7 @@ hackathon decks show --json
 The team is the signed-in participant's own. Exit 2: not a share link `https://<host>/v/<token>/`.
 Exit 1 with the platform's sentence: the link's host is not one the platform accepts (the sentence
 names the allowed host). Exit 3: sign in, or not on a team. The pitch and the vote presentation are
-the two other links (the `pitch` skill, the `vote` skill); they reuse these screenshots.
+the two other links (the `hackathon-deck-pitch` skill, the `hackathon-deck-vote` skill); they reuse these screenshots.
 
 Commit `decks/demo/guide.json`, `play.mjs`, `screens/` and `results.json`, never `decks/demo/deck/`
 or `decks/demo/check/`. Push before the freeze like any other work.

@@ -1,5 +1,5 @@
 ---
-name: coach-help
+name: hackathon-coach-help
 description: Help a hackathon coach (the platform calls them advisors) answer the teams' help requests. Lists what waits for a coach, reads a request and its thread, looks at the team's code in the local clone, drafts a reply the coach can post, and claims, posts, unclaims or resolves only on the coach's explicit word. Also lists every hackathon CLI command a coach may use. Use when a coach says "what's waiting", "open requests", "help team X with their request", "answer this request", "draft a reply", "claim it", "post it", "mark it resolved", "what can I do as a coach", or "which commands can a coach run".
 ---
 
@@ -9,7 +9,7 @@ The `hackathon` CLI does every read and every act, with the coach's own sign-in,
 `--json`. This skill reads, looks at the code and drafts; **every write (a claim, a post, an unclaim, a
 resolve, a reopen) waits for the coach's explicit OK on that exact act**, and a post shows its exact text
 first. If `hackathon connect --json` does not answer with `eligibility.role` `advisor` or `organizer`, run
-the `coach-brief` skill first: it signs the coach in and picks the event's workspace.
+the `hackathon-coach-brief` skill first: it signs the coach in and picks the event's workspace.
 
 A refusal is `{ "ok": false, "error": { "code", "message" } }`: relay the message, never retry in a loop.
 
@@ -31,7 +31,7 @@ hackathon requests show <requestId> --json          # its team, status, body, an
 hackathon chats read <channelId> --limit 100 --json # the thread, newest first
 ```
 
-Then the team's context, the way the `coach-brief` skill gets it (the team chat and its threads, the
+Then the team's context, the way the `hackathon-coach-brief` skill gets it (the team chat and its threads, the
 repository cloned or pulled with `git pull --ff-only`). When the clone is already there, pull it and read
 the files the request and the thread point to: the error quoted, the file named, the last commits
 (`git log -n 10 --stat`). Reproduce only what is safe to run read-only (reading, a build or a test the

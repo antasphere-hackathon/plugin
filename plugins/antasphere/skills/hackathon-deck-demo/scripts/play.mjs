@@ -2,7 +2,7 @@
 /*
  * The play of a demo deck: plain Playwright, one file.
  *
- * The demo skill copies this file into the team's clone as
+ * The `hackathon-deck-demo` skill copies this file into the team's clone as
  * `decks/demo/play.mjs` and writes the gestures at the bottom for the team's
  * own app. It reads `decks/demo/guide.json` beside it, opens the app, plays
  * one gesture per step, numbered straight through the episodes (episode 1's

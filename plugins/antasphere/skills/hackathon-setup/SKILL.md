@@ -1,6 +1,6 @@
 ---
-name: join
-description: Join the Antasphere Hackathon from zero to the team's app running locally. Installs the hackathon CLI, signs the participant in with their Antasphere account, checks their place on the roster, sets their GitHub username, waits for them to accept the repository invitation, clones the team repository, starts the app and opens it, then gives the team its project description and states the deadlines and the pacing. Use when a participant says "join the hackathon", "set me up", "get started", "install the hackathon", "clone our team repo", or has just installed this plugin.
+name: hackathon-setup
+description: Join the Antasphere Hackathon from zero to the team's app running locally. Checks Node.js, installs the hackathon CLI, runs hackathon doctor early to fix the machine (git, Docker, disk), signs the participant in with their Antasphere account, checks their place on the roster, sets their GitHub username, waits for them to accept the repository invitation, clones the team repository, starts the app and opens it, then gives the team its project description and states the deadlines and the pacing, with a final doctor run. Use when a participant says "join the hackathon", "set me up", "get started", "install the hackathon", "clone our team repo", or has just installed this plugin.
 ---
 
 # Join the hackathon
@@ -13,7 +13,16 @@ Pass `--json` to every `hackathon` command and read the answer on stdout. A refu
 `{ "ok": false, "error": { "code", "message" } }` with an exit code (the table at the end). Where a step
 says ASK, ask the participant and wait: never guess their email, their GitHub username or their folder.
 
-## 1. The CLI
+## 1. Node.js, then the CLI
+
+The CLI installs through npm, so Node.js comes first:
+
+```bash
+node --version
+```
+
+No Node.js, or a version below 22: point to https://nodejs.org (version 22 or later) and stop until it
+is installed. Then:
 
 ```bash
 npm i -g @antasphere/hackathon@latest
@@ -22,16 +31,36 @@ hackathon --version
 
 This skill needs version 0.7.1 or later (the one-command Antasphere sign-in and `decks link`). An older
 version prints a `login` help that talks about "an existing hck_ API key": then the event's CLI is not
-published yet. Say so and stop; an organizer has to publish it. No Node.js: point to
-https://nodejs.org (version 22 or later) and stop until it is installed.
+published yet. Say so and stop; an organizer has to publish it.
 
-## 2. Sign in (once per machine)
+## 2. The machine, before the sign-in
+
+Check the machine now, so nothing about it surprises the participant after the sign-in and the clone:
+
+```bash
+hackathon doctor --json
+```
+
+It changes nothing. Read `checks` (`{ name, ok, detail, fix?, cls? }`). At this point only the machine
+checks must pass: `git`, `git identity`, `node`, `docker`, `docker daemon`, `docker compose` and `disk`
+(class `environment`). For each one with `ok` false, show its `fix` and walk the participant through it
+on their system (`platform`: `darwin` is macOS, `linux`, `win32` is Windows), the way the
+`hackathon-doctor` skill does (`git identity`: ask the name and email they want on their commits, then
+`git config --global user.name "<name>"` and `git config --global user.email "<email>"`; Docker Desktop
+not running is the usual one). Run the doctor again after each fix, until every machine check passes.
+
+Every other check is expected to fail here, since nobody is signed in and nothing is cloned yet:
+`instance`, `credential`, `roster`, `repository`, `github access`, `directory`, `push`, `installer`,
+`app`, `manifest`. Ignore them now; the steps below settle them, and the final doctor run proves it.
+Ignore the exit code at this step too: it reflects those checks.
+
+## 3. Sign in (once per machine)
 
 ```bash
 hackathon connect --json
 ```
 
-- Exit 0: signed in already, go to step 3 with this answer.
+- Exit 0: signed in already, go to step 4 with this answer.
 - Exit 3 saying to run `hackathon login`: sign the participant in, in two commands. ASK their email:
   "Which email address have you been using with Antasphere? It is the one our emails, your invitation
   and the briefing call were sent to." Never guess it. Then say a code is on its way and run
@@ -54,7 +83,7 @@ then `hackathon connect --api-url <url> --json`.
 `eligibility.eligible` false in the answer (an organizer, a coach, a jury member, or a participant not
 on a team yet): there is no team app to set up. Say why, and stop.
 
-## 3. GitHub access
+## 4. GitHub access
 
 Read `repository` in the connect answer. `repository.state` is `pending`: the organizers have not
 created the team repositories yet. Stop and say to come back later. When it is `assigned`, read
@@ -70,7 +99,7 @@ created the team repositories yet. Stop and say to come back later. When it is `
   has to act. Stop.
 - `canPush` true, or `standing` `unknown` (GitHub did not answer): go on.
 
-## 4. Clone and set up
+## 5. Clone and set up
 
 ASK where the repository should go, and propose `defaultDirectory` from the connect answer
 (`~/Antasphere/hackathon/<team>`). With another folder, pass `--directory <path>` to every command
@@ -106,37 +135,46 @@ It builds and starts the app from the repository's `hackathon.json` and waits fo
 fine. Exit 4 "not ready in time": run the `docker compose … logs` command it printed and read the
 error with the participant.
 
-## 5. Open it
+## 6. Open it
 
 Open the local app (`app.url`) and the platform's dashboard (`dashboardUrl`) from the setup answer
 (`open <url>` on macOS, `xdg-open` on
 Linux, `start` on Windows). If the app asks to claim the instance on the first boot, the setup token is
 in its log: `docker compose -p hackathon-<team> logs app | grep 'claim the instance'`, run from the clone.
 
-## 6. The team's project description
+## 7. The team's project description
 
 Right after the app runs, give the team its one line: each team is a project of the event, and its
 description is what the organizers, the coaches and the jury read about it. Take the project from
-`hackathon event status --json` (`me.project.id`), then follow section 5 of the `check` skill ("The
+`hackathon event status --json` (`me.project.id`), then follow section 5 of the `hackathon-doctor` skill ("The
 team's project description"): ASK in one question what they are building (the problem, for whom, the
 approach), propose a crisp description, and on their OK set it, or, as a participant is an editor
 of their project and only a manager may change it, open the `Project description` request for an
-organizer with the agreed text. If they do not know yet, say it can wait and the `check` skill will ask
+organizer with the agreed text. If they do not know yet, say it can wait and the `hackathon-doctor` skill will ask
 again.
 
-## 7. The clock and the pacing
+## 8. The clock and the pacing
 
 Read `hackathon event status --json` and tell the participant the phase, the time left to the build
 end and to the freeze (the build end plus 15 minutes) in the event's time zone, and the rule: what
 counts is the last push to the designated branch (`submission.repository.designatedBranch` in the
 team's line) that the platform **received** before the freeze; there is nothing to click. From here,
-the pacing of the `check` skill section 6 holds: push small and often (at least every 30 to 45 minutes)
+the pacing of the `hackathon-doctor` skill section 6 holds: push small and often (at least every 30 to 45 minutes)
 and confirm the receipt, warnings at 60, 30 and 15 minutes before the build end, only fixes in the
-grace, the `demo` skill before the end.
+grace, the `hackathon-deck-demo` skill before the end.
+
+Then run the doctor a last time, from the clone, to prove the whole setup:
+
+```bash
+hackathon doctor --directory <clone> --json
+```
+
+Every check must pass now. For any that fails, show its `fix` and settle it as the `hackathon-doctor`
+skill does, then run it again until it exits 0.
 
 Finish with one short summary: who they are, their team, the clone's folder, the local URL, the
-dashboard URL, the deadlines, and the two next skills: the `check` skill at the start of every working
-session (the clock, the setup, the push), the `demo` skill when the demo deck is due.
+dashboard URL, the deadlines, and the two next skills: the `hackathon-doctor` skill at the start of every working
+session (the clock, the setup, the push), the `hackathon-deck-demo` skill when the demo deck is due.
 
 ## Exit codes
 
