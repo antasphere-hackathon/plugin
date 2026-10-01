@@ -1,5 +1,5 @@
 ---
-name: pitch
+name: hackathon-deck-pitch
 description: Make the team's pitch presentation for the Antasphere Hackathon, the deck one member presents on stage to the jury in three to five minutes. Starts it from the organizer's Pitch presentation template on Slideless, fills it from the repository and the demo's screenshots, checks it on a laptop and a phone, publishes it with a share link and registers that link with hackathon decks link --pitch. Use when the participant says "pitch", "our presentation", "the slides for the jury", "make our pitch deck", "set our presentation link", or when the pitches are near.
 ---
 
@@ -13,8 +13,8 @@ checks), the live demo (the cue to switch to the app, its screenshot as the fall
 stands, and the line the jury should remember.
 
 Work from the root of the team's clone; everything goes into `decks/pitch/`. The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder
-`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/pitch/scripts`, and after
-`npx skills add` it is `~/.agents/skills/pitch/scripts`): `fill.mjs` fills the deck, `check.mjs` checks it,
+`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/hackathon-deck-pitch/scripts`, and after
+`npx skills add` it is `~/.agents/skills/hackathon-deck-pitch/scripts`): `fill.mjs` fills the deck, `check.mjs` checks it,
 and `pitch.example.json` shows the content filled for an invented tool.
 
 ## 1. Slideless, in the event's workspace
@@ -55,9 +55,9 @@ deck, so the next push is a new version and the share link keeps working.
 
 ## 3. Gather, then ASK
 
-Read the repository (the README, the routes, the dashboard's pages). When the `demo` skill ran, use its
+Read the repository (the README, the routes, the dashboard's pages). When the `hackathon-deck-demo` skill ran, use its
 screenshots in `decks/demo/screens/`: one for what was built, one for the live moment. Without them,
-take two screenshots of the running app (the demo skill's `play.mjs` does it).
+take two screenshots of the running app (the `hackathon-deck-demo` skill's `play.mjs` does it).
 
 Then ASK the participant, in ONE message, to confirm each slide's words, proposed from what you read:
 

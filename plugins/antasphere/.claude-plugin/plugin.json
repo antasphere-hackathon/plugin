@@ -1,0 +1,21 @@
+{
+  "name": "antasphere",
+  "displayName": "Antasphere Hackathon",
+  "version": "0.6.0",
+  "description": "The participant and coach skills of the Antasphere Hackathon, every one prefixed hackathon-: hackathon-setup (from zero to your team's app running, the machine checked first), hackathon-doctor (the opening of every session: the clock, the doctor, the push received, the project description, the pacing), the three decks from the organizers' Slideless templates, each hosted with a share link and registered on the platform: hackathon-deck-demo (episodes of Playwright screenshots), hackathon-deck-pitch (the stage) and hackathon-deck-vote (the elevator pitch the other participants read), and for coaches hackathon-coach-brief (a team's chat, requests, decks and repository, summarized) and hackathon-coach-help (answer a help request, post on your word).",
+  "author": {
+    "name": "Antasphere",
+    "url": "https://antasphere.com"
+  },
+  "homepage": "https://github.com/antasphere-hackathon/plugin",
+  "repository": "https://github.com/antasphere-hackathon/plugin",
+  "license": "SEE LICENSE IN LICENSE",
+  "keywords": [
+    "antasphere",
+    "hackathon",
+    "participant",
+    "coach",
+    "slideless",
+    "playwright"
+  ]
+}

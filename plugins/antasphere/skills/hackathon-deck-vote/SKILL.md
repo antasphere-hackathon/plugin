@@ -1,5 +1,5 @@
 ---
-name: vote
+name: hackathon-deck-vote
 description: Make the team's vote presentation for the Antasphere Hackathon, the elevator pitch with the gaps filled that the other participants read on the Vote page before ranking the teams. Starts it from the organizer's Vote presentation template on Slideless, fills it from the repository and the demo's screenshots, checks it on a laptop and a phone, publishes it with a share link and registers that link with hackathon decks link --vote. Use when the participant says "vote presentation", "make our vote deck", "the deck for the vote", "set our vote link", "vote", or when the event says the vote presentation is due.
 ---
 
@@ -14,11 +14,11 @@ compare on the same grounds:
 
 Six screens: the cover, who it is for, what it is (beside a screenshot), what changes, the moment
 that proves it (beside a screenshot), the whole sentence with the team. It is not the pitch (the
-stage, the `pitch` skill) and not the demo (the jury's episodes, the `demo` skill).
+stage, the `hackathon-deck-pitch` skill) and not the demo (the jury's episodes, the `hackathon-deck-demo` skill).
 
 Work from the root of the team's clone; everything goes into `decks/vote/`. The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder
-`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts`, and after
-`npx skills add` it is `~/.agents/skills/vote/scripts`): `fill.mjs` fills the deck, `check.mjs` checks it,
+`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/hackathon-deck-vote/scripts`, and after
+`npx skills add` it is `~/.agents/skills/hackathon-deck-vote/scripts`): `fill.mjs` fills the deck, `check.mjs` checks it,
 and `vote.example.json` shows the content filled for an invented tool.
 
 ## 1. Slideless, in the event's workspace
@@ -59,9 +59,9 @@ deck, so the next push is a new version of the same deck and the share link keep
 
 ## 3. Gather, then ASK
 
-Read the repository (the README, the routes, the dashboard's pages). When the `demo` skill ran, use its
+Read the repository (the README, the routes, the dashboard's pages). When the `hackathon-deck-demo` skill ran, use its
 screenshots in `decks/demo/screens/`: one for what it is, one for the moment that proves it. Without
-them, take two screenshots of the running app (the demo skill's `play.mjs` does it).
+them, take two screenshots of the running app (the `hackathon-deck-demo` skill's `play.mjs` does it).
 
 Then ASK the participant, in ONE message, to confirm each gap, proposed from what you read, and read
 the whole sentence aloud to them:

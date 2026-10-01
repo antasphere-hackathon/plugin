@@ -9,8 +9,8 @@
   },
   "plugins": [
     {
-      "name": "antasphere-hackathon",
-      "source": "./plugins/antasphere-hackathon",
+      "name": "antasphere",
+      "source": "./plugins/antasphere",
       "description": "Join the Antasphere Hackathon, keep your setup and your pace, make your team's three decks (demo, pitch, vote) from the organizers' templates; and for coaches, brief on a team and answer its requests. Driven by the hackathon CLI.",
       "category": "productivity",
       "homepage": "https://github.com/antasphere-hackathon/plugin"
