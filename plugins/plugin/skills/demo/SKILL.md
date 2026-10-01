@@ -12,11 +12,11 @@ action with the screen's exact labels, what the screen showed, and a screenshot 
 running app. The jury opens a screenshot large and follows an episode step by step. A feature the app
 does not have is never in it.
 
-Work from the root of the team's clone; everything goes into `decks/demo/`. The scripts ship with the
-plugin: `${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts/play.mjs` (the Playwright play, copied into the
-clone and completed for this app), `${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs` and `check.mjs`,
-and `${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts/guide.example.json` (the content filled for an
-invented tool).
+Work from the root of the team's clone; everything goes into `decks/demo/`. The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder
+`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts`, and after
+`npx skills add` it is `~/.agents/skills/demo/scripts`): `play.mjs` (the Playwright play, copied into the
+clone and completed for this app), `fill.mjs` (fills the organizer's template), `check.mjs` (checks the
+page) and `guide.example.json` (the content filled for an invented tool).
 
 ## 1. The app is running
 
@@ -24,7 +24,7 @@ invented tool).
 hackathon doctor --directory . --json
 ```
 
-The `app` check must pass. If it does not, run `/plugin:check` first. The app's local URL is
+The `app` check must pass. If it does not, run the `check` skill first. The app's local URL is
 `http://127.0.0.1:<port>`, the port being `app.port` of `hackathon.json` (or the one `hackathon setup`
 printed when it was started with `--port`).
 
@@ -61,7 +61,7 @@ npx --prefix ~/.cache/antasphere-hackathon/playwright playwright install chromiu
 Copy the play into the clone and write its gestures:
 
 ```bash
-cp "${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts/play.mjs" decks/demo/play.mjs
+cp "$SKILL_DIR/scripts/play.mjs" decks/demo/play.mjs
 ```
 
 At the bottom of `decks/demo/play.mjs`, write one gesture per step number (`async 3({ page, open,
@@ -111,7 +111,7 @@ slideless template list --json --workspace <id>
 ```
 
 Take the template titled `Demo deck`. **When there is none, STOP**: tell the participant the
-organizers have not published the event's templates yet (their `/event-decks` guide does it) and to
+organizers have not published the event's templates yet (their `event-decks` guide does it) and to
 ask one of them. Never build the page any other way. Then, once:
 
 ```bash
@@ -124,8 +124,8 @@ repository: it is never committed. When it already exists, keep it: its `.slidel
 to the published deck. Then:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs" demo decks/demo
-node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/check.mjs" decks/demo
+node "$SKILL_DIR/scripts/fill.mjs" demo decks/demo
+node "$SKILL_DIR/scripts/check.mjs" decks/demo
 ```
 
 `fill.mjs` copies `guide.json` and the screenshots into the deck and renders the page with the
@@ -157,7 +157,7 @@ hackathon decks show --json
 The team is the signed-in participant's own. Exit 2: not a share link `https://<host>/v/<token>/`.
 Exit 1 with the platform's sentence: the link's host is not one the platform accepts (the sentence
 names the allowed host). Exit 3: sign in, or not on a team. The pitch and the vote presentation are
-the two other links (`/plugin:pitch`, `/plugin:vote`); they reuse these screenshots.
+the two other links (the `pitch` skill, the `vote` skill); they reuse these screenshots.
 
 Commit `decks/demo/guide.json`, `play.mjs`, `screens/` and `results.json`, never `decks/demo/deck/`
 or `decks/demo/check/`. Push before the freeze like any other work.

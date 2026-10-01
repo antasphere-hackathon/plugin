@@ -2,9 +2,9 @@
 /*
  * Check a filled deck the way its readers will see it, before it is published.
  *
- *   node <plugin>/scripts/decks/check.mjs decks/vote     # checks decks/vote/deck/
- *   node <plugin>/scripts/decks/check.mjs decks/pitch
- *   node <plugin>/scripts/decks/check.mjs decks/demo
+ *   node <skill>/scripts/check.mjs decks/vote     # checks decks/vote/deck/
+ *   node <skill>/scripts/check.mjs decks/pitch
+ *   node <skill>/scripts/check.mjs decks/demo
  *
  * The slide decks (pitch, vote) are walked at 1280 × 720, slide by slide, and on a phone (390 × 844),
  * screen by screen; the demo page is read whole at 1440 × 900 with every episode open, its step

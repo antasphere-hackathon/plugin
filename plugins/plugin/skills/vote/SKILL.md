@@ -14,12 +14,12 @@ compare on the same grounds:
 
 Six screens: the cover, who it is for, what it is (beside a screenshot), what changes, the moment
 that proves it (beside a screenshot), the whole sentence with the team. It is not the pitch (the
-stage, `/plugin:pitch`) and not the demo (the jury's episodes, `/plugin:demo`).
+stage, the `pitch` skill) and not the demo (the jury's episodes, the `demo` skill).
 
-Work from the root of the team's clone; everything goes into `decks/vote/`. The scripts ship with
-the plugin: `${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs` fills the deck, `check.mjs` checks it, and
-`${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts/vote.example.json` shows the content filled for an
-invented tool.
+Work from the root of the team's clone; everything goes into `decks/vote/`. The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder
+`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/vote/scripts`, and after
+`npx skills add` it is `~/.agents/skills/vote/scripts`): `fill.mjs` fills the deck, `check.mjs` checks it,
+and `vote.example.json` shows the content filled for an invented tool.
 
 ## 1. Slideless, in the event's workspace
 
@@ -44,7 +44,7 @@ slideless template list --json --workspace <id>
 ```
 
 Take the template titled `Vote presentation`. **When there is none, STOP**: tell the participant the
-organizers have not published the event's templates yet (their `/event-decks` guide does it) and to
+organizers have not published the event's templates yet (their `event-decks` guide does it) and to
 ask one of them. Never build the deck any other way. Then, once:
 
 ```bash
@@ -59,7 +59,7 @@ deck, so the next push is a new version of the same deck and the share link keep
 
 ## 3. Gather, then ASK
 
-Read the repository (the README, the routes, the dashboard's pages). When `/plugin:demo` ran, use its
+Read the repository (the README, the routes, the dashboard's pages). When the `demo` skill ran, use its
 screenshots in `decks/demo/screens/`: one for what it is, one for the moment that proves it. Without
 them, take two screenshots of the running app (the demo skill's `play.mjs` does it).
 
@@ -83,8 +83,8 @@ Write `decks/vote/vote.json` in the shape of `vote.example.json`: `lang` (`en`, 
 must flow from the fixed word before it (French: `qui`; Dutch: `die`).
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs" vote decks/vote
-node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/check.mjs" decks/vote
+node "$SKILL_DIR/scripts/fill.mjs" vote decks/vote
+node "$SKILL_DIR/scripts/check.mjs" decks/vote
 ```
 
 `fill.mjs` exit 2, one line per problem (an empty gap, a text too long, a missing image, a link that

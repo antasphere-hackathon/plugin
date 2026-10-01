@@ -12,10 +12,10 @@ screenshot), how it works (a small diagram: what goes in, the agent, what comes 
 checks), the live demo (the cue to switch to the app, its screenshot as the fallback), where it
 stands, and the line the jury should remember.
 
-Work from the root of the team's clone; everything goes into `decks/pitch/`. The scripts ship with the
-plugin: `${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs` fills the deck, `check.mjs` checks it, and
-`${CLAUDE_PLUGIN_ROOT}/skills/pitch/scripts/pitch.example.json` shows the content filled for an
-invented tool.
+Work from the root of the team's clone; everything goes into `decks/pitch/`. The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder
+`$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/pitch/scripts`, and after
+`npx skills add` it is `~/.agents/skills/pitch/scripts`): `fill.mjs` fills the deck, `check.mjs` checks it,
+and `pitch.example.json` shows the content filled for an invented tool.
 
 ## 1. Slideless, in the event's workspace
 
@@ -40,7 +40,7 @@ slideless template list --json --workspace <id>
 ```
 
 Take the template titled `Pitch presentation`. **When there is none, STOP**: tell the participant the
-organizers have not published the event's templates yet (their `/event-decks` guide does it) and to
+organizers have not published the event's templates yet (their `event-decks` guide does it) and to
 ask one of them. Never build the deck any other way. Then, once:
 
 ```bash
@@ -55,7 +55,7 @@ deck, so the next push is a new version and the share link keeps working.
 
 ## 3. Gather, then ASK
 
-Read the repository (the README, the routes, the dashboard's pages). When `/plugin:demo` ran, use its
+Read the repository (the README, the routes, the dashboard's pages). When the `demo` skill ran, use its
 screenshots in `decks/demo/screens/`: one for what was built, one for the live moment. Without them,
 take two screenshots of the running app (the demo skill's `play.mjs` does it).
 
@@ -82,8 +82,8 @@ Write `decks/pitch/pitch.json` in the shape of `pitch.example.json`: `lang` (`en
 slide reads from the back of the room.
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/fill.mjs" pitch decks/pitch
-node "${CLAUDE_PLUGIN_ROOT}/scripts/decks/check.mjs" decks/pitch
+node "$SKILL_DIR/scripts/fill.mjs" pitch decks/pitch
+node "$SKILL_DIR/scripts/check.mjs" decks/pitch
 ```
 
 `fill.mjs` exit 2, one line per problem: fix `pitch.json`, run it again. `check.mjs` needs Playwright

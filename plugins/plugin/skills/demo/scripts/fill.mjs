@@ -2,9 +2,9 @@
 /*
  * Fill a deck started from the organizer's template with the team's content.
  *
- *   node <plugin>/scripts/decks/fill.mjs pitch decks/pitch     # decks/pitch/pitch.json → decks/pitch/deck/
- *   node <plugin>/scripts/decks/fill.mjs vote  decks/vote      # decks/vote/vote.json   → decks/vote/deck/
- *   node <plugin>/scripts/decks/fill.mjs demo  decks/demo      # decks/demo/guide.json + screens/ → decks/demo/deck/
+ *   node <skill>/scripts/fill.mjs pitch decks/pitch     # decks/pitch/pitch.json → decks/pitch/deck/
+ *   node <skill>/scripts/fill.mjs vote  decks/vote      # decks/vote/vote.json   → decks/vote/deck/
+ *   node <skill>/scripts/fill.mjs demo  decks/demo      # decks/demo/guide.json + screens/ → decks/demo/deck/
  *
  * `deck/` is what `slideless template start "<title>" <dir>/deck` wrote. The content file beside it is
  * the team's source (committed); `deck/` is rebuilt from it (git-ignored: it carries the brand's faces).

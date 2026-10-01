@@ -65,8 +65,21 @@ if (market) {
         const p = path.join(dir, m[0]);
         if (!fs.existsSync(p)) fail(`${rel}: names ${m[0]}, which does not exist`);
       }
-      for (const m of text.matchAll(/\{CLAUDE_PLUGIN_ROOT\}\/(scripts\/[\w./-]+\.m?js)/g)) {
-        if (!fs.existsSync(path.join(dir, m[1]))) fail(`${rel}: names ${m[1]}, which does not exist`);
+      // `$SKILL_DIR/scripts/<file>`: the skill's own folder, the only one `npx skills add` installs
+      for (const m of text.matchAll(/\$SKILL_DIR\/(scripts\/[\w.-]+)/g)) {
+        if (!fs.existsSync(path.join(skillsDir, skill, m[1]))) fail(`${rel}: names $SKILL_DIR/${m[1]}, which is not in skills/${skill}/`);
+      }
+    }
+    // a script several skills carry (each skill is installed alone) is the same file in each of them
+    const copies = new Map();
+    for (const skill of fs.readdirSync(skillsDir)) {
+      const scripts = path.join(skillsDir, skill, 'scripts');
+      for (const f of fs.existsSync(scripts) ? fs.readdirSync(scripts) : []) {
+        if (!f.endsWith('.mjs')) continue;
+        const body = fs.readFileSync(path.join(scripts, f), 'utf8');
+        if (!copies.has(f)) copies.set(f, { skill, body });
+        else if (copies.get(f).body !== body)
+          fail(`skills/${skill}/scripts/${f} differs from skills/${copies.get(f).skill}/scripts/${f}: the copies must stay identical`);
       }
     }
     // the plugin's own scripts (shared by several skills) parse

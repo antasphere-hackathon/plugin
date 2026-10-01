@@ -53,16 +53,17 @@ plugins/plugin/.claude-plugin/plugin.json
 plugins/plugin/skills/join/SKILL.md
 plugins/plugin/skills/check/SKILL.md
 plugins/plugin/skills/demo/SKILL.md
-plugins/plugin/skills/demo/scripts/      play.mjs (Playwright), guide.example.json
+plugins/plugin/skills/demo/scripts/      play.mjs (Playwright), fill.mjs, check.mjs, guide.example.json
 plugins/plugin/skills/pitch/SKILL.md
-plugins/plugin/skills/pitch/scripts/     pitch.example.json
+plugins/plugin/skills/pitch/scripts/     fill.mjs, check.mjs, pitch.example.json
 plugins/plugin/skills/vote/SKILL.md
-plugins/plugin/skills/vote/scripts/      vote.example.json
-plugins/plugin/scripts/decks/            fill.mjs (a started template filled), check.mjs (laptop and phone, Playwright)
+plugins/plugin/skills/vote/scripts/      fill.mjs, check.mjs, vote.example.json
 scripts/check.mjs                        the CI check: manifests, frontmatter, versions, scripts
 ```
 
-A change to a skill bumps `version` in `plugins/plugin/.claude-plugin/plugin.json`; that version is
+Every skill carries its own scripts, because `npx skills add` installs a skill's folder alone: `fill.mjs` (a
+started template filled) and `check.mjs` (laptop and phone, Playwright) are the same file in demo, pitch and
+vote, and the CI check fails when the copies differ. A change to a skill bumps `version` in `plugins/plugin/.claude-plugin/plugin.json`; that version is
 what Claude Code compares on update. `node scripts/check.mjs` runs in CI on every push.
 
 ## License
