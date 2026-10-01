@@ -69,7 +69,7 @@ participant: the deck is built from this skill's own copy of the template in ste
 ## 3. Fill
 
 Write `decks/vote/vote.json` in the shape of `vote.example.json`: `lang` (`en`, `fr` or `nl`),
-`team`, `product`, `oneLiner`, `forWhom`, `problem` (`person`, `text`), `does` (`image`, `lines`:
+`team`, `product`, `oneLiner`, `forWhom` (without the leading "For": the deck adds it), `problem` (`person`, `text`), `does` (`image`, `lines`:
 one to three), `moment` (`image`, `text`), `built` (`lines`, or `null` to skip the screen), `why`
 (`line`, `members`), `demoUrl` (`https://…` or `null`). Image paths are relative to `decks/vote/`,
 so the demo's screenshots are `../demo/screens/03.jpg`. The team's own words, short: the limits are
