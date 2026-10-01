@@ -32,16 +32,19 @@ hackathon connect --json
 ```
 
 - Exit 0: signed in already, go to step 3 with this answer.
-- Exit 3 saying to run `hackathon login`: the participant signs in once. `hackathon login` is
-  interactive (it asks the Antasphere email, then the code mailed to it), so the agent cannot answer
-  it: ask the participant to run `hackathon login` in a terminal of their own, with the email the
-  organizers registered for them, and to tell you when it printed `Signed in as …`. Then run
+- Exit 3 saying to run `hackathon login`: sign the participant in, in two commands. ASK their email:
+  "Which email address have you been using with Antasphere? It is the one our emails, your invitation
+  and the briefing call were sent to." Never guess it. Then say a code is on its way and run
+  `hackathon login --email <email> --send-only`. When they paste the code, run
+  `hackathon login --email <email> --code <code>`; it prints `Signed in as …`. A refused code has
+  expired: send a new one with `--send-only`. (A CLI older than 0.8.1 has no `--send-only`: run
+  `hackathon login --email <email>` and pass the code on its standard input.) Then run
   `hackathon connect --json` again.
 - "This account has no access to Antasphere Hackathon in any of its organizations" (exit 3): not
   fixable here. The organizers must add the participant's email to the event. Say so and stop.
 - `not_on_roster` (exit 3): the email signed in is not the one on the roster. If the participant used
   another email, run `npx @antasphere/cli logout` (it forgets the stored Antasphere login), then
-  `hackathon login` again (in their own terminal) with the email on the roster. Otherwise an organizer
+  sign in again, as above, with the email on the roster. Otherwise an organizer
   adds them; stop.
 - `event_not_configured` (exit 3): the event is not open yet. Stop and say to try again later.
 
@@ -114,11 +117,11 @@ in its log: `docker compose -p hackathon-<team> logs app | grep 'claim the insta
 
 Right after the app runs, give the team its one line: each team is a project of the event, and its
 description is what the organizers, the coaches and the jury read about it. Take the project from
-`hackathon event status --json` (`me.project.id`), then follow section 5 of `/plugin:check` ("The
+`hackathon event status --json` (`me.project.id`), then follow section 5 of the `check` skill ("The
 team's project description"): ASK in one question what they are building (the problem, for whom, the
 approach), propose a crisp description, and on their OK set it, or, as a participant is an editor
 of their project and only a manager may change it, open the `Project description` request for an
-organizer with the agreed text. If they do not know yet, say it can wait and `/plugin:check` will ask
+organizer with the agreed text. If they do not know yet, say it can wait and the `check` skill will ask
 again.
 
 ## 7. The clock and the pacing
@@ -127,13 +130,13 @@ Read `hackathon event status --json` and tell the participant the phase, the tim
 end and to the freeze (the build end plus 15 minutes) in the event's time zone, and the rule: what
 counts is the last push to the designated branch (`submission.repository.designatedBranch` in the
 team's line) that the platform **received** before the freeze; there is nothing to click. From here,
-the pacing of `/plugin:check` section 6 holds: push small and often (at least every 30 to 45 minutes)
+the pacing of the `check` skill section 6 holds: push small and often (at least every 30 to 45 minutes)
 and confirm the receipt, warnings at 60, 30 and 15 minutes before the build end, only fixes in the
-grace, `/plugin:demo` before the end.
+grace, the `demo` skill before the end.
 
 Finish with one short summary: who they are, their team, the clone's folder, the local URL, the
-dashboard URL, the deadlines, and the two next skills: `/plugin:check` at the start of every working
-session (the clock, the setup, the push), `/plugin:demo` when the demo deck is due.
+dashboard URL, the deadlines, and the two next skills: the `check` skill at the start of every working
+session (the clock, the setup, the push), the `demo` skill when the demo deck is due.
 
 ## Exit codes
 

@@ -10,7 +10,7 @@ with what to do, a real screenshot and what you should see. This skill makes it 
 never from imagination: every screenshot is taken by Playwright on the team's app, and a feature the
 app does not have is never in the deck.
 
-The scripts ship with this skill: `${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts/` holds `play.mjs` (the
+The scripts ship with this skill, in the `scripts/` folder beside this SKILL.md (call that folder `$SKILL_DIR/scripts`; under Claude Code it is also `${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts`, and after `npx skills add` it is `~/.agents/skills/demo/scripts`). It holds `play.mjs` (the
 Playwright play, copied into the clone and completed for this app), `render.mjs` (the deck's layout)
 and `demo.example.json` (an invented example of the deck's content). Work from the root of the team's
 clone; everything goes into `decks/demo/`.
@@ -21,7 +21,7 @@ clone; everything goes into `decks/demo/`.
 hackathon doctor --directory . --json
 ```
 
-The `app` check must pass. If it does not, run `/plugin:check` first. The app's local URL is
+The `app` check must pass. If it does not, use the `check` skill first. The app's local URL is
 `http://127.0.0.1:<port>`, the port being `app.port` of `hackathon.json` (or the one `hackathon setup`
 printed when it was started with `--port`).
 
@@ -50,7 +50,7 @@ npx --prefix ~/.cache/antasphere-hackathon/playwright playwright install chromiu
 Copy the play into the clone and write its gestures:
 
 ```bash
-cp "${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts/play.mjs" decks/demo/play.mjs
+cp "$SKILL_DIR/scripts/play.mjs" decks/demo/play.mjs
 ```
 
 At the bottom of `decks/demo/play.mjs`, write one gesture per step (`async 3({ page, open, expect })`)
@@ -87,7 +87,7 @@ what to change and what to keep), fill it from `demo.json` and the screenshots, 
 **Otherwise** use the layout that ships with this skill:
 
 ```bash
-node "${CLAUDE_PLUGIN_ROOT}/skills/demo/scripts/render.mjs" decks/demo
+node "$SKILL_DIR/scripts/render.mjs" decks/demo
 ```
 
 It writes `decks/demo/dist/index.html` with the screenshots beside it. Open it (`open` on macOS) and
@@ -105,8 +105,8 @@ in by it, with no second sign-in. Then:
 
 - "No instance configured": an older Slideless CLI. Pass `--api-url https://slideless.antasphere.com`
   to every `slideless` command below.
-- It asks to sign in, or "Run `antasphere login` once": the participant runs `hackathon login` in their
-  own terminal (it is interactive), then `slideless whoami --json` again.
+- It asks to sign in, or "Run `antasphere login` once": sign them in with `hackathon login --email <email> --send-only` then
+  `--code <code>` (the `join` skill says how), then `slideless whoami --json` again.
 - A refusal from Antasphere that the organization has no access to Slideless: go to **If Slideless is
   not available** below.
 

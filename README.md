@@ -1,43 +1,43 @@
 # Antasphere Hackathon: the participant and coach plugin
 
-A Claude Code plugin for the participants and the coaches of an Antasphere Hackathon. It drives the
-`hackathon` command line (npm `@antasphere/hackathon`) and holds five skills:
+The skills for the participants and the coaches of an Antasphere Hackathon, for any coding agent. They
+drive the `hackathon` command line (npm `@antasphere/hackathon`); there are five:
 
 | Skill            | What it does                                                                                                                                   |
 | ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `/plugin:join`   | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app, then your project description and the deadlines. |
-| `/plugin:check`  | The opening of every session: the clock first (time left to the build end and the freeze), `hackathon doctor` and its fixes, the app restarted when it is down, whether your last push was received, your project description kept current, and the pacing. |
-| `/plugin:demo`   | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
-| `/plugin:coach-brief` | For coaches: signs you in, picks the event, pulls one team's chat, threads, requests and deck links, clones or pulls its repository, summarizes. |
-| `/plugin:coach-help`  | For coaches: what waits, a request and its thread read against the team's code, a reply drafted; claims, posts, resolves only on your word.    |
+| `join`           | From zero to your team's app running: installs the CLI, signs you in, sets your GitHub username, clones your team repository, starts the app, then your project description and the deadlines. |
+| `check`          | The opening of every session: the clock first (time left to the build end and the freeze), `hackathon doctor` and its fixes, the app restarted when it is down, whether your last push was received, your project description kept current, and the pacing. |
+| `demo`           | Plays your running app with Playwright, takes the screenshots, builds the demo deck, hosts it on Slideless, sets its link on the platform.     |
+| `coach-brief`    | For coaches: signs you in, picks the event, pulls one team's chat, threads, requests and deck links, clones or pulls its repository, summarizes. |
+| `coach-help`     | For coaches: what waits, a request and its thread read against the team's code, a reply drafted; claims, posts, resolves only on your word.    |
 
 ## Install
 
-In Claude Code:
+In any coding agent (Claude Code, Codex, Cursor, …), one command:
 
 ```
-/plugin marketplace add antasphere-hackathon/plugin
-/plugin install plugin@antasphere-hackathon
+npx -y skills add antasphere-hackathon/plugin --global --skill '*' --yes
 ```
 
-Then say `/plugin:join` (or just "join the hackathon").
-
-Updates: `/plugin marketplace update antasphere-hackathon`.
+Then say "join the hackathon". The simplest start is the prompt on
+[docs.antasphere.com/hackathon/getting-started/start-here](https://docs.antasphere.com/hackathon/getting-started/start-here),
+which runs this for you. In Claude Code the plugin also installs as before:
+`/plugin marketplace add antasphere-hackathon/plugin`, then `/plugin install plugin@antasphere-hackathon`.
 
 ## For coaches
 
 The platform calls a coach an advisor. A coach reads every team's chat and help requests and, once the
 organizers have your GitHub username on the roster, every team's repository (read only: GitHub sends one
-invitation per team repository; `/plugin:coach-brief` offers to accept them with the GitHub CLI).
+invitation per team repository; `coach-brief` offers to accept them with the GitHub CLI).
 
 Install the plugin as above, then:
 
-- `/plugin:coach-brief` (or "brief me on team Night Owls"): the first run signs you in with your
+- `coach-brief` (or "brief me on team Night Owls"): the first run signs you in with your
   Antasphere account and picks the event's workspace; then it gathers the team's chat and its threads,
   its requests and their threads, its deck links and its repository (cloned under
   `~/Antasphere/hackathon-coach/` unless you choose another folder) and writes what the team builds, its
   stack, what it pushed, where it is stuck and what it asked.
-- `/plugin:coach-help` (or "what's waiting", "help with this request"): lists the open requests, reads
+- `coach-help` (or "what's waiting", "help with this request"): lists the open requests, reads
   the one you pick against the team's code, drafts a reply, and claims, posts, unclaims or resolves only
   when you say so, each act on its own OK. It also lists every command a coach may run.
 
@@ -57,15 +57,15 @@ say so and carry on.
 
 What counts as your team's submission is the last push to your designated branch that the platform
 received before the freeze (the build end plus 15 minutes of grace). There is nothing to click. So
-`/plugin:check` opens every session with the time left, and the agent then paces the work: small
+`check` opens every session with the time left, and the agent then paces the work: small
 pushes at least every 30 to 45 minutes with the receipt confirmed, warnings at 60, 30 and 15 minutes
-before the build end, only fixes during the grace, and `/plugin:demo` before the end. Run
-`/plugin:check` first in every new session.
+before the build end, only fixes during the grace, and `demo` before the end. Run
+`check` first in every new session.
 
 ## Your project description
 
 Your team is a project of the event, and its description is the line organizers, coaches and the
-jury read about you. `/plugin:join` and `/plugin:check` ask what you are building, propose a crisp
+jury read about you. `join` and `check` ask what you are building, propose a crisp
 description and, on your OK, hand it to an organizer through a help request (a participant is an
 editor of their project; only a manager, which an organizer is, may change its description).
 

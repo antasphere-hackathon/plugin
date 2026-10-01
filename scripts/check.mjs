@@ -44,7 +44,8 @@ if (market) {
     const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
     for (const skill of fs.readdirSync(skillsDir)) {
       // Every skill is in the README's table and its layout, so a new one is never shipped undocumented.
-      if (!readme.includes(`\`/${entry.name}:${skill}\``)) fail(`README.md: the skill table does not name /${entry.name}:${skill}`);
+      // The table names a skill as `npx skills add` installs it: by its folder's name, `| \`<skill>\` |`.
+      if (!new RegExp(`^\\| \`${skill}\` +\\|`, 'm').test(readme)) fail(`README.md: the skill table does not name \`${skill}\``);
       if (!readme.includes(`skills/${skill}/SKILL.md`)) fail(`README.md: the layout does not list skills/${skill}/SKILL.md`);
       const file = path.join(skillsDir, skill, 'SKILL.md');
       const rel = path.relative(root, file);

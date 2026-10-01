@@ -7,7 +7,7 @@ description: Brief a hackathon coach (the platform calls them advisors) on one t
 
 The coach is signed in with their own Antasphere account; the `hackathon` CLI does every read and prints
 JSON with `--json`. This skill sequences the reads and writes the summary. It never posts, claims or
-resolves anything: that is `/plugin:coach-help`, on the coach's word. Where a step says ASK, ask the coach
+resolves anything: that is the `coach-help` skill, on the coach's word. Where a step says ASK, ask the coach
 and wait.
 
 A refusal is `{ "ok": false, "error": { "code", "message" } }` with an exit code: 2 a flag is wrong,
@@ -40,7 +40,7 @@ hackathon connect --json
   ASK which one when several could be the event's; never guess.
 
 Read `eligibility.role` in the connect answer. `advisor` (a coach) or `organizer`: go on. `participant`:
-this is not a coach account, point to `/plugin:join` and stop. `jury`: the jury does not read the chats;
+this is not a coach account, point to the `join` skill and stop. `jury`: the jury does not read the chats;
 stop. `eligible: false` is expected for a coach: a coach has no team app to set up.
 
 ## 2. The event and the teams
@@ -156,7 +156,7 @@ the last commits' diffs (`git -C <dir> show --stat HEAD~5..HEAD`). Then write, s
 5. **What they asked**: each request in one line, and what the thread already tried.
 6. **Links**: the demo deck and the presentation (or "not set yet"), the clone's folder.
 
-End with the next move: `/plugin:coach-help` to answer a request.
+End with the next move: the `coach-help` skill to answer a request.
 
 ## Never
 
