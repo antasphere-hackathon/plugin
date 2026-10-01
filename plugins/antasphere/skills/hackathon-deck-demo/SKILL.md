@@ -134,7 +134,7 @@ steps, a step without its screenshot or a `noshot`, a text too long): fix `guide
 step, run it again. `check.mjs` opens the page with every episode open and its step player, and on a
 phone, writes `decks/demo/check/`, and prints `ok`. Exit 1, one line per problem. Open the
 screenshots with the participant (`open decks/demo/check`), or the page itself
-(`open decks/demo/deck/index.html`).
+(`open decks/demo/deck/index.html`); `open` on macOS, `start` on Windows, `xdg-open` on Linux.
 
 ## 6. Publish and share
 
