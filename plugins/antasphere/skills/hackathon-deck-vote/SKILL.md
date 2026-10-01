@@ -96,7 +96,7 @@ prints `ok`. Exit 1, one line per problem: a text that runs out of its slide, a 
 scrolls, a request outside the deck, an image that did not load, a deck over 5 MB. Shorten in
 `vote.json`, fill, check again.
 
-Open the screenshots with the participant (`open decks/vote/check`). A screen that says what the app
+Open the screenshots with the participant (`open decks/vote/check` on macOS, `start` on Windows, `xdg-open` on Linux). A screen that says what the app
 does not do is rewritten, never kept.
 
 ## 5. Publish and share

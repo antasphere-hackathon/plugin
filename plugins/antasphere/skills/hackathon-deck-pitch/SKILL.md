@@ -91,7 +91,7 @@ once per machine (exit 4 says how). It walks the eight slides on a laptop and th
 phone, writes `decks/pitch/check/laptop-N.png` and `phone-N.png`, and prints `ok`. Exit 1, one line
 per problem: a text that runs out of its slide, a phone screen that scrolls, a request outside the
 deck, an image that did not load. Shorten in `pitch.json`, fill, check again. Open the screenshots
-with the participant (`open decks/pitch/check`); open `decks/pitch/deck/index.html` to rehearse
+with the participant (`open decks/pitch/check` on macOS, `start` on Windows, `xdg-open` on Linux); open `decks/pitch/deck/index.html` to rehearse
 (arrows, Page Up/Down for a clicker).
 
 ## 5. Publish and share
